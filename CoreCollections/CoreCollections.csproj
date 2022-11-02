@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Label="Identity">
 		<Product>Rem.Core.Collections</Product>
@@ -67,6 +67,10 @@
 		<PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
 
 		<Using Remove="System.Net.Http" /><!-- Remove this using from auto-generation since this package is not used -->
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Rem.Core.ComponentModel" Version="1.2.3" />
 	</ItemGroup>
 
 </Project>
