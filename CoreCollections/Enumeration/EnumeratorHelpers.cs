@@ -9,7 +9,7 @@ namespace Rem.Core.Collections.Enumeration;
 /// <summary>
 /// A series of helper methods for working with enumerators.
 /// </summary>
-internal static class Enumerators
+public static class Enumerators
 {
     /// <summary>
     /// Gets an exception that can be thrown appropriately when <see cref="System.Collections.IEnumerator.MoveNext"/>
