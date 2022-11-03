@@ -20,7 +20,7 @@ public class ReadOnly2DArrayTest
     [TestMethod]
     public void TestIndex()
     {
-        var arr = Values.Indices(2, 3);
+        var arr = Values.Indices(2, 3).AsReadOnly();
 
         for (int r = 0; r < arr.RowCount; r++)
         {
@@ -39,7 +39,7 @@ public class ReadOnly2DArrayTest
     [TestMethod]
     public void TestRows()
     {
-        var arr = Values.Indices(2, 3);
+        var arr = Values.Indices(2, 3).AsReadOnly();
         var expectedRows = new[]
         {
             new[] { (0L, 0L), (0, 1), (0, 2) },
@@ -72,7 +72,7 @@ public class ReadOnly2DArrayTest
     [TestMethod]
     public void TestColumns()
     {
-        var arr = Values.Indices(2, 3);
+        var arr = Values.Indices(2, 3).AsReadOnly();
         var expectedColumns = new[]
         {
             new[] { (0L, 0L), (1, 0) },
@@ -127,7 +127,7 @@ public class ReadOnly2DArrayTest
     [TestMethod]
     public void TestCount()
     {
-        var arr = Values.Indices(2, 3);
+        var arr = Values.Indices(2, 3).AsReadOnly();
         Assert.AreEqual(6, arr.Count);
         Assert.AreEqual(6L, arr.LongCount);
     }
@@ -138,7 +138,7 @@ public class ReadOnly2DArrayTest
     [TestMethod]
     public void TestDimensionCount()
     {
-        var arr = Values.Indices(6, 5);
+        var arr = Values.Indices(6, 5).AsReadOnly();
         Assert.AreEqual(6, arr.RowCount);
         Assert.AreEqual(6L, arr.LongRowCount);
         Assert.AreEqual(5, arr.ColumnCount);
