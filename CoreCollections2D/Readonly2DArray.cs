@@ -13,7 +13,7 @@ namespace Rem.Core.Collections2D;
 /// <summary>
 /// Static functionality for the generic <see cref="Readonly2DArray{T}"/> struct.
 /// </summary>
-public static class Readonly2DArray
+public static class ReadOnly2DArray
 {
     /// <summary>
     /// Wraps the current array in a readonly wrapper.
@@ -23,16 +23,16 @@ public static class Readonly2DArray
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"><paramref name="Array"/> was <see langword="null"/>.</exception>
     [return: NonDefaultableStruct]
-    public static Readonly2DArray<T> AsReadOnly<T>(this T[,] Array) => new(Array);
+    public static ReadOnly2DArray<T> AsReadOnly<T>(this T[,] Array) => new(Array);
 
     /// <summary>
-    /// Creates a new <see cref="Readonly2DArray{T}"/> wrapping a shallow copy of the specified array.
+    /// Creates a new <see cref="ReadOnly2DArray{T}"/> wrapping a shallow copy of the specified array.
     /// </summary>
     /// <param name="Array"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"><paramref name="Array"/> was <see langword="null"/>.</exception>
     [return: NonDefaultableStruct]
-    public static Readonly2DArray<T> Clone<T>(T[,] Array)
+    public static ReadOnly2DArray<T> Clone<T>(T[,] Array)
     {
         if (Array is null) throw new ArgumentNullException(nameof(Array));
         return new(Unsafe.As<T[,]>(Array.Clone()));
@@ -43,7 +43,7 @@ public static class Readonly2DArray
 /// A readonly wrapper for a 2-dimensional array.
 /// </summary>
 /// <typeparam name="T">The type of elements of the array.</typeparam>
-public readonly struct Readonly2DArray<T> : IDefaultableStruct, IEnumerable<T>
+public readonly struct ReadOnly2DArray<T> : IDefaultableStruct, IEnumerable<T>
 {
     /// <inheritdoc/>
     public bool IsDefault => _array is null;

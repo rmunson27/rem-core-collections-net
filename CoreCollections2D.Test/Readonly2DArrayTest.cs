@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Rem.Core.Collections2D.Test;
 
 /// <summary>
-/// Tests for the <see cref="Readonly2DArray{T}"/> struct and related static functionality.
+/// Tests for the <see cref="ReadOnly2DArray{T}"/> struct and related static functionality.
 /// </summary>
 [TestClass]
-public class Readonly2DArrayTest
+public class ReadOnly2DArrayTest
 {
     /// <summary>
-    /// Tests the <see cref="Readonly2DArray{T}"/> indexer.
+    /// Tests the <see cref="ReadOnly2DArray{T}"/> indexer.
     /// </summary>
     [TestMethod]
     public void TestIndex()
@@ -30,14 +30,14 @@ public class Readonly2DArrayTest
     }
 
     /// <summary>
-    /// Tests the <see cref="Readonly2DArray.Clone{T}(T[,])"/> method.
+    /// Tests the <see cref="ReadOnly2DArray.Clone{T}(T[,])"/> method.
     /// </summary>
     [TestMethod]
     public void TestClone()
     {
         var arr = new[,] { { 1, 2 }, { 3, 4 } };
-        Readonly2DArray<int> readonly1 = new(arr), readonly2 = new(arr);
-        Readonly2DArray<int> readonlyClone = Readonly2DArray.Clone(arr);
+        ReadOnly2DArray<int> readonly1 = new(arr), readonly2 = new(arr);
+        ReadOnly2DArray<int> readonlyClone = ReadOnly2DArray.Clone(arr);
 
         // Control test
         Assert.AreEqual(readonly1, readonly2);

@@ -17,7 +17,7 @@ public static class Values
     /// <param name="Dimension0"></param>
     /// <param name="Dimension1"></param>
     /// <returns></returns>
-    public static Readonly2DArray<(long Index0, long Index1)> Indices(long Dimension0, long Dimension1)
+    public static ReadOnly2DArray<(long Index0, long Index1)> Indices(long Dimension0, long Dimension1)
     {
         var arr = new (long, long)[Dimension0, Dimension1];
         for (long i0 = 0; i0 < Dimension0; i0++)
@@ -32,14 +32,14 @@ public static class Values
     }
 
     /// <summary>
-    /// Creates a new <see cref="Readonly2DArray{TElement}"/> wrapping the array passed in.
+    /// Creates a new <see cref="ReadOnly2DArray{TElement}"/> wrapping the array passed in.
     /// </summary>
     /// <typeparam name="TElement"></typeparam>
     /// <param name="Count0"></param>
     /// <param name="Count1"></param>
     /// <param name="selector"></param>
     /// <returns></returns>
-    public static Readonly2DArray<TElement> Create<TElement>(
+    public static ReadOnly2DArray<TElement> Create<TElement>(
         long Count0, long Count1, Func<long, long, TElement> selector)
     {
         var arr = new TElement[Count0, Count1];
