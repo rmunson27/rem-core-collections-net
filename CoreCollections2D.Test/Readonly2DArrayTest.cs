@@ -20,11 +20,11 @@ public class ReadOnly2DArrayTest
     {
         var arr = Values.Indices(2, 3);
 
-        for (int r = 0; r < arr.GetLength(0); r++)
+        for (int r = 0; r < arr.RowCount; r++)
         {
-            for (int s = 0; s < arr.GetLength(1); s++)
+            for (int c = 0; c < arr.ColumnCount; c++)
             {
-                Assert.AreEqual((r, s), arr[r, s]);
+                Assert.AreEqual((r, c), arr[r, c]);
             }
         }
     }
@@ -58,15 +58,15 @@ public class ReadOnly2DArrayTest
     }
 
     /// <summary>
-    /// Tests the single dimension length-getting methods.
+    /// Tests the single dimension count-getting methods.
     /// </summary>
     [TestMethod]
-    public void TestGetLength()
+    public void TestDimensionCount()
     {
         var arr = Values.Indices(6, 5);
-        Assert.AreEqual(6, arr.GetLength(0));
-        Assert.AreEqual(6L, arr.GetLongLength(0));
-        Assert.AreEqual(5, arr.GetLength(1));
-        Assert.AreEqual(5L, arr.GetLongLength(1));
+        Assert.AreEqual(6, arr.RowCount);
+        Assert.AreEqual(6L, arr.LongRowCount);
+        Assert.AreEqual(5, arr.ColumnCount);
+        Assert.AreEqual(5L, arr.LongColumnCount);
     }
 }

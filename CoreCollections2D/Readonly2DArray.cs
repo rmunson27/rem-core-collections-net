@@ -44,7 +44,7 @@ public static class ReadOnly2DArray
 /// A readonly wrapper for a 2-dimensional array.
 /// </summary>
 /// <typeparam name="T">The type of elements of the array.</typeparam>
-public readonly struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnlyList2D<T>
+public readonly record struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnlyList2D<T>
 {
     #region Properties And Fields
     /// <inheritdoc/>
@@ -143,14 +143,34 @@ public readonly struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnlyList2D<
     #endregion
 
     #region Methods
-    #region GetLength
-    /// <inheritdoc cref="Array.GetLength(int)"/>
-    [DoesNotReturnIfInstanceDefault]
-    public int GetLength(int dimension) => _array.GetLength(dimension);
+    #region Equality
+    /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
+    public bool Equals(ReadOnly2DArray<T> other) => _array == other._array;
 
-    /// <inheritdoc cref="Array.GetLongLength(int)"/>
+    /// <summary>
+    /// Gets a hash code representing the current instance.
+    /// </summary>
+    /// <returns></returns>
     [DoesNotReturnIfInstanceDefault]
-    public long GetLongLength(int dimension) => _array.GetLongLength(dimension);
+    public override int GetHashCode() => _array.GetHashCode();
+    #endregion
+
+    #region ToString
+    /// <summary>
+    /// Gets a string representing the current instance.
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString() => _array.ToString();
+    #endregion
+
+    #region Clone
+    /// <summary>
+    /// Gets a shallow copy of the array wrapped in this instance.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="DefaultInstanceException">This method was called on the default.</exception>
+    [DoesNotReturnIfInstanceDefault]
+    public T[,] GetClone() => Unsafe.As<T[,]>(_array.ThrowDefaultIfNull().Clone());
     #endregion
     #endregion
 
@@ -187,8 +207,17 @@ public readonly struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnlyList2D<
         /// <param name="index"></param>
         /// <returns></returns>
         /// <exception cref="DefaultInstanceException">This indexer was accessed on the default.</exception>
+        /// <exception cref="IndexOutOfRangeException">The index was out of range.</exception>
         [DoesNotReturnIfInstanceDefault]
-        public Row this[int index] => new(_array.ThrowDefaultIfNull(), index);
+        public Row this[int index]
+        {
+            get
+            {
+                if (index < 0) throw new IndexOutOfRangeException("Index was negative.");
+                else if (index >= Count) throw new IndexOutOfRangeException("Index exceeded maximum row index.");
+                else return new(_array.ThrowDefaultIfNull(), index);
+            }
+        }
 
         private readonly T[,] _array;
 
@@ -423,14 +452,14 @@ public readonly struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnlyList2D<
         /// </summary>
         /// <exception cref="DefaultInstanceException">This property was accessed on the default.</exception>
         [DoesNotReturnIfInstanceDefault]
-        public long LongCount => _array.ThrowDefaultIfNull().GetLongLength(Dimension2D.Row);
+        public long LongCount => _array.ThrowDefaultIfNull().GetLongLength(Dimension2D.Column);
 
         /// <summary>
         /// Gets the number of columns in the array.
         /// </summary>
         /// <exception cref="DefaultInstanceException">This property was accessed on the default.</exception>
         [DoesNotReturnIfInstanceDefault]
-        public int Count => _array.ThrowDefaultIfNull().GetLength(Dimension2D.Row);
+        public int Count => _array.ThrowDefaultIfNull().GetLength(Dimension2D.Column);
 
         [DoesNotReturnIfInstanceDefault]
         IReadOnlyList<T> IReadOnlyList<IReadOnlyList<T>>.this[int index] => this[index];
@@ -441,8 +470,17 @@ public readonly struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnlyList2D<
         /// <param name="index"></param>
         /// <returns></returns>
         /// <exception cref="DefaultInstanceException">This indexer was accessed on the default.</exception>
+        /// <exception cref="IndexOutOfRangeException">The index was out of range.</exception>
         [DoesNotReturnIfInstanceDefault]
-        public ReadOnly2DArray<T>.Column this[int index] => new(_array.ThrowDefaultIfNull(), index);
+        public ReadOnly2DArray<T>.Column this[int index]
+        {
+            get
+            {
+                if (index < 0) throw new IndexOutOfRangeException("Index was negative.");
+                else if (index >= Count) throw new IndexOutOfRangeException("Index exceeded maximum column index.");
+                else return new(_array.ThrowDefaultIfNull(), index);
+            }
+        }
 
         private readonly T[,] _array;
 
