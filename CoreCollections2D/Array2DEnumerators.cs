@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rem.Core.Collections;
+namespace Rem.Core.Collections2D;
 
 /// <summary>
 /// Helper methods for 2D array vector (row and column) enumerators.

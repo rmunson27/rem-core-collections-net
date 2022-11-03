@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rem.Core.Collections;
+namespace Rem.Core.Collections2D;
 
 /// <summary>
 /// Represents a dimension of a 2-dimensional collection.

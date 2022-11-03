@@ -7,7 +7,7 @@
 		<Description>
 			A core set of 2-dimensional collection utilities for .NET.
 		</Description>
-		<RootNamespace>Rem.Core.Collections</RootNamespace>
+		<RootNamespace>Rem.Core.Collections2D</RootNamespace>
 		<Version>1.0</Version>
 		<Authors>Richard E. Munson</Authors>
 		<Copyright>Richard E. Munson, 2022</Copyright>
