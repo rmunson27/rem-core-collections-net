@@ -8,7 +8,7 @@ namespace Rem.Core.Collections2D.Test;
 using Index2D = ValueTuple<long, long>;
 
 /// <summary>
-/// Tests of the
+/// Tests of the <see cref="SequenceEquality2D"/> class functionality.
 /// </summary>
 [TestClass]
 public class SequenceEquality2DTest
