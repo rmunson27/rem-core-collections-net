@@ -47,14 +47,14 @@ public class ReadOnly2DArrayTest
     }
 
     /// <summary>
-    /// Tests the length-getting methods.
+    /// Tests the count-getting methods.
     /// </summary>
     [TestMethod]
-    public void TestLength()
+    public void TestCount()
     {
         var arr = Values.Indices(2, 3);
-        Assert.AreEqual(6, arr.Length);
-        Assert.AreEqual(6L, arr.LongLength);
+        Assert.AreEqual(6, arr.Count);
+        Assert.AreEqual(6L, arr.LongCount);
     }
 
     /// <summary>
