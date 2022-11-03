@@ -29,7 +29,6 @@ internal static class Array2DEnumerators
     /// Gets the exception to throw for an index that indicates that the enumeration has not started or
     /// already finished.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     /// <param name="index"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -59,7 +58,9 @@ internal static class Array2DEnumerators
     /// <summary>
     /// Performs the <see cref="IEnumerator.MoveNext"/> functionality for a given 2-dimensional array and index.
     /// </summary>
+    /// <typeparam name="T"></typeparam>
     /// <param name="array"></param>
+    /// <param name="nonFixedDimension"></param>
     /// <param name="currentIndex"></param>
     /// <returns></returns>
     /// <exception cref="DefaultInstanceException">

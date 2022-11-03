@@ -159,7 +159,7 @@ public readonly record struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnly
     /// Gets a string representing the current instance.
     /// </summary>
     /// <returns></returns>
-    public override string ToString() => _array.ToString();
+    public override string? ToString() => _array?.ToString();
     #endregion
 
     #region Clone
