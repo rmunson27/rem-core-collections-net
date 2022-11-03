@@ -3,6 +3,7 @@
 	<PropertyGroup Label="Identity">
 		<Product>Rem.Core.Collections2D</Product>
 		<PackageId>Rem.Core.Collections2D</PackageId>
+		<RootNamespace>Rem.Core.Collections2D</RootNamespace>
 		<Description>
 			A core set of 2-dimensional collection utilities for .NET.
 		</Description>
