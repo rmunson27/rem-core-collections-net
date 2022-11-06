@@ -42,6 +42,15 @@ public static class SequenceEquality
         => new ImmutableArrayComparerType<T>();
 
     /// <summary>
+    /// Creates a <see cref="NestedEqualityComparer{TGeneric, TParameter}"/> that can compare
+    /// <see cref="SelectedList{T}"/> instances based on sequence equality.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static NestedEqualityComparer<SelectedList<T>, T> SelectedListComparer<T>()
+        => new SelectedListComparerType<T>();
+
+    /// <summary>
     /// Gets a hash code for the <see cref="IEnumerable{T}"/> passed in based on its structure.
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -138,6 +147,18 @@ public static class SequenceEquality
 
             return SequenceEquality.GetHashCode(obj, nestedComparer);
         }
+    }
+
+    private sealed class SelectedListComparerType<T> : NestedEqualityComparer<SelectedList<T>, T>
+    {
+        /// <inheritdoc/>
+        public override bool Equals(
+            [AllowNull] SelectedList<T> x, [AllowNull] SelectedList<T> y, IEqualityComparer<T> nestedComparer)
+            => x is null ? y is null : x.SequenceEqual(y, nestedComparer);
+
+        /// <inheritdoc/>
+        public override int GetHashCode([DisallowNull] SelectedList<T> obj, IEqualityComparer<T> nestedComparer)
+            => obj.GetSequenceHashCode(nestedComparer);
     }
     #endregion
 }
