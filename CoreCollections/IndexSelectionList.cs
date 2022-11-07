@@ -27,7 +27,13 @@ public class IndexSelectorList<T> : IndexSelectionList<T>
     /// </summary>
     /// <param name="Selector">The selector that will be used to get the elements of the list by index.</param>
     /// <inheritdoc cref="IndexSelectionList{T}.IndexSelectionList(int)"/>
-    public IndexSelectorList(Func<int, T> Selector, [NonNegative] int Count) : base(Count)
+    public IndexSelectorList(
+        Func<int, T> Selector,
+#pragma warning disable IDE0079 // Suppression is necessary for packaging
+#pragma warning disable CS1573 // Parameter doc is inherited
+        [NonNegative] int Count)
+#pragma warning restore IDE0079, CS1573
+        : base(Count)
     {
         this.Selector = Selector;
     }
