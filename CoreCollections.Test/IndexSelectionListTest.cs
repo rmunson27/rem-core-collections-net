@@ -7,42 +7,42 @@ using System.Threading.Tasks;
 namespace Rem.Core.Collections.Test;
 
 /// <summary>
-/// Tests of the <see cref="SelectedList{T}"/> class and the derived <see cref="FuncSelectedList{T}"/> classes.
+/// Tests of the <see cref="IndexSelectionList{T}"/> class and the derived <see cref="IndexSelectorList{T}"/> classes.
 /// </summary>
 [TestClass]
-public class SelectedListTest
+public class IndexSelectionListTest
 {
     #region Tests
     /// <summary>
-    /// Tests sequence equality of <see cref="SelectedList{T}"/> instances.
+    /// Tests sequence equality of <see cref="IndexSelectionList{T}"/> instances.
     /// </summary>
     [TestMethod]
     public void TestSequenceEqual()
     {
-        var list = new FuncSelectedList<int>(Square, 4);
-        var list2 = new FuncSelectedList<int>(Square, 4);
+        var list = new IndexSelectorList<int>(Square, 4);
+        var list2 = new IndexSelectorList<int>(Square, 4);
         Assert.IsTrue(list.SequenceEqual(list));
         Assert.IsTrue(list2.SequenceEqual(list));
         Assert.IsTrue(list.SequenceEqual(new[] { 0, 1, 4, 9 }));
     }
 
     /// <summary>
-    /// Tests hash code getting methods of <see cref="SelectedList{T}"/> instances.
+    /// Tests hash code getting methods of <see cref="IndexSelectionList{T}"/> instances.
     /// </summary>
     [TestMethod]
     public void TestGetHashCode()
     {
-        var list = new FuncSelectedList<int>(Square, 4);
+        var list = new IndexSelectorList<int>(Square, 4);
         Assert.AreEqual(list.GetSequenceHashCode(), SequenceEquality.GetHashCode(new[] { 0, 1, 4, 9 }));
     }
 
     /// <summary>
-    /// Tests the indexer of the <see cref="SelectedList{T}"/> class.
+    /// Tests the indexer of the <see cref="IndexSelectionList{T}"/> class.
     /// </summary>
     [TestMethod]
     public void TestIndexer()
     {
-        var list = new FuncSelectedList<int>(Square, 4);
+        var list = new IndexSelectorList<int>(Square, 4);
         Assert.ThrowsException<IndexOutOfRangeException>(() => list[-1]);
         for (int i = 0; i < list.Count; i++)
         {
@@ -52,12 +52,12 @@ public class SelectedListTest
     }
 
     /// <summary>
-    /// Tests the <see cref="SelectedList{T}.Enumerator"/> struct.
+    /// Tests the <see cref="IndexSelectionList{T}.Enumerator"/> struct.
     /// </summary>
     [TestMethod]
     public void TestEnumerator()
     {
-        var list = new FuncSelectedList<int>(Square, 4);
+        var list = new IndexSelectorList<int>(Square, 4);
         var enumerator = list.GetEnumerator();
 
         // Run a single test of the enumeration to ensure that resetting the enumerator works as expected

@@ -43,11 +43,11 @@ public static class SequenceEquality
 
     /// <summary>
     /// Creates a <see cref="NestedEqualityComparer{TGeneric, TParameter}"/> that can compare
-    /// <see cref="SelectedList{T}"/> instances based on sequence equality.
+    /// <see cref="IndexSelectionList{T}"/> instances based on sequence equality.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static NestedEqualityComparer<SelectedList<T>, T> SelectedListComparer<T>()
+    public static NestedEqualityComparer<IndexSelectionList<T>, T> SelectedListComparer<T>()
         => new SelectedListComparerType<T>();
 
     /// <summary>
@@ -149,15 +149,15 @@ public static class SequenceEquality
         }
     }
 
-    private sealed class SelectedListComparerType<T> : NestedEqualityComparer<SelectedList<T>, T>
+    private sealed class SelectedListComparerType<T> : NestedEqualityComparer<IndexSelectionList<T>, T>
     {
         /// <inheritdoc/>
         public override bool Equals(
-            [AllowNull] SelectedList<T> x, [AllowNull] SelectedList<T> y, IEqualityComparer<T> nestedComparer)
+            [AllowNull] IndexSelectionList<T> x, [AllowNull] IndexSelectionList<T> y, IEqualityComparer<T> nestedComparer)
             => x is null ? y is null : x.SequenceEqual(y, nestedComparer);
 
         /// <inheritdoc/>
-        public override int GetHashCode([DisallowNull] SelectedList<T> obj, IEqualityComparer<T> nestedComparer)
+        public override int GetHashCode([DisallowNull] IndexSelectionList<T> obj, IEqualityComparer<T> nestedComparer)
             => obj.GetSequenceHashCode(nestedComparer);
     }
     #endregion

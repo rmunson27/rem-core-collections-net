@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 namespace Rem.Core.Collections;
 
 /// <summary>
-/// A simple concrete <see cref="SelectedList{T}"/> implementation defined by a selector function.
+/// A simple concrete <see cref="IndexSelectionList{T}"/> implementation defined by a selector function.
 /// </summary>
 /// <inheritdoc/>
-public sealed class FuncSelectedList<T> : SelectedList<T>
+public class IndexSelectorList<T> : IndexSelectionList<T>
 {
     /// <summary>
     /// Gets the function that will be used to select the elements of the list.
@@ -22,25 +22,25 @@ public sealed class FuncSelectedList<T> : SelectedList<T>
     public Func<int, T> Selector { get; }
 
     /// <summary>
-    /// Constructs a new instance of the <see cref="FuncSelectedList{T}"/> class defined by the selector and
+    /// Constructs a new instance of the <see cref="IndexSelectorList{T}"/> class defined by the selector and
     /// count passed in.
     /// </summary>
     /// <param name="Selector">The selector that will be used to get the elements of the list by index.</param>
-    /// <inheritdoc cref="SelectedList{T}.SelectedList(int)"/>
-    public FuncSelectedList(Func<int, T> Selector, [NonNegative] int Count) : base(Count)
+    /// <inheritdoc cref="IndexSelectionList{T}.IndexSelectionList(int)"/>
+    public IndexSelectorList(Func<int, T> Selector, [NonNegative] int Count) : base(Count)
     {
         this.Selector = Selector;
     }
 
     /// <inheritdoc/>
-    protected override T GetElementAt([NonNegative] int index) => Selector(index);
+    protected sealed override T GetElementAt([NonNegative] int index) => Selector(index);
 }
 
 /// <summary>
-/// A list defined by a selector applied to a range starting at 0 and ending at <see cref="SelectedList{T}.Count"/>.
+/// A list defined by mapping a range starting at 0 and ending at <see cref="IndexSelectionList{T}.Count"/> to values.
 /// </summary>
 /// <typeparam name="T">The type of elements in the list.</typeparam>
-public abstract class SelectedList<T> : IReadOnlyList<T>
+public abstract class IndexSelectionList<T> : IReadOnlyList<T>
 {
     #region Properties, Fields And Indexers
     /// <summary>
@@ -67,11 +67,11 @@ public abstract class SelectedList<T> : IReadOnlyList<T>
 
     #region Constructor
     /// <summary>
-    /// Constructs a new instance of the <see cref="SelectedList{T}"/> class with the given count.
+    /// Constructs a new instance of the <see cref="IndexSelectionList{T}"/> class with the given count.
     /// </summary>
     /// <param name="Count">The number of elements in the list.</param>
     /// <exception cref="IndexOutOfRangeException"><paramref name="Count"/> was negative.</exception>
-    protected SelectedList([NonNegative] int Count)
+    protected IndexSelectionList([NonNegative] int Count)
     {
         if (Count < 0) throw new IndexOutOfRangeException(nameof(Count));
         this.Count = Count;
@@ -108,20 +108,20 @@ public abstract class SelectedList<T> : IReadOnlyList<T>
 
     #region Sequence Equality
     /// <summary>
-    /// Determines if this instance is sequence-equal to another <see cref="SelectedList{T}"/>.
+    /// Determines if this instance is sequence-equal to another <see cref="IndexSelectionList{T}"/>.
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool SequenceEqual(SelectedList<T>? other) => SequenceEqual(other, EqualityComparer<T>.Default);
+    public bool SequenceEqual(IndexSelectionList<T>? other) => SequenceEqual(other, EqualityComparer<T>.Default);
 
     /// <summary>
-    /// Determines if this instance is sequence-equal to another <see cref="SelectedList{T}"/>, using the specified
+    /// Determines if this instance is sequence-equal to another <see cref="IndexSelectionList{T}"/>, using the specified
     /// <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
     /// </summary>
     /// <param name="other"></param>
     /// <param name="comparer"></param>
     /// <returns></returns>
-    public bool SequenceEqual(SelectedList<T>? other, IEqualityComparer<T>? comparer)
+    public bool SequenceEqual(IndexSelectionList<T>? other, IEqualityComparer<T>? comparer)
     {
         if (other is null) return false;
         if (Count != other.Count) return false;
@@ -188,7 +188,7 @@ public abstract class SelectedList<T> : IReadOnlyList<T>
 
     #region Types
     /// <summary>
-    /// An enumerator for the <see cref="SelectedList{T}"/> class.
+    /// An enumerator for the <see cref="IndexSelectionList{T}"/> class.
     /// </summary>
     public struct Enumerator
     {
@@ -204,10 +204,10 @@ public abstract class SelectedList<T> : IReadOnlyList<T>
         };
         private int _currentIndex;
 
-        private readonly SelectedList<T> _list;
+        private readonly IndexSelectionList<T> _list;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal Enumerator(SelectedList<T> list)
+        internal Enumerator(IndexSelectionList<T> list)
         {
             _list = list;
             _currentIndex = NotStartedIndex;
