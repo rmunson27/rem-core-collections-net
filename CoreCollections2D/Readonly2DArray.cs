@@ -121,12 +121,13 @@ public readonly struct ReadOnly2DArray<T>
     /// <summary>
     /// Gets the element specified by the indices.
     /// </summary>
-    /// <param name="index0"></param>
-    /// <param name="index1"></param>
+    /// <param name="rowIndex"></param>
+    /// <param name="columnIndex"></param>
     /// <returns></returns>
     /// <exception cref="DefaultInstanceException">This indexer was accessed on the default.</exception>
     [DoesNotReturnIfInstanceDefault]
-    public ref readonly T this[int index0, int index1] => ref _array.ThrowDefaultIfNull()[index0, index1];
+    public ref readonly T this[long rowIndex, long columnIndex]
+        => ref _array.ThrowDefaultIfNull()[rowIndex, columnIndex];
     #endregion
 
     #region Constructor
