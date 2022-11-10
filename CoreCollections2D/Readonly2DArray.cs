@@ -43,7 +43,8 @@ public static class ReadOnly2DArray
 /// A readonly wrapper for a 2-dimensional array.
 /// </summary>
 /// <typeparam name="T">The type of elements of the array.</typeparam>
-public readonly record struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnlyList2D<T>
+public readonly struct ReadOnly2DArray<T>
+    : IEquatable<ReadOnly2DArray<T>>, IEquatable<T[,]>, IDefaultableStruct, IReadOnlyList2D<T>
 {
     #region Properties And Fields
     /// <inheritdoc/>
@@ -143,6 +144,44 @@ public readonly record struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnly
 
     #region Methods
     #region Equality
+    /// <inheritdoc cref="operator ==(ReadOnly2DArray{T}, T[,]?)"/>
+    public static bool operator !=(T[,]? lhs, ReadOnly2DArray<T> rhs) => rhs != lhs;
+
+    /// <inheritdoc cref="operator ==(ReadOnly2DArray{T}, T[,]?)"/>
+    public static bool operator ==(T[,]? lhs, ReadOnly2DArray<T> rhs) => rhs == lhs;
+
+    /// <summary>
+    /// Determines if the <see cref="ReadOnly2DArray{T}"/> passed in does not wrap the array passed in.
+    /// </summary>
+    /// <param name="lhs"></param>
+    /// <param name="rhs"></param>
+    /// <returns></returns>
+    public static bool operator !=(ReadOnly2DArray<T> lhs, T[,]? rhs) => !lhs.Equals(rhs);
+
+    /// <summary>
+    /// Determines if the <see cref="ReadOnly2DArray{T}"/> passed in wraps the array passed in.
+    /// </summary>
+    /// <param name="lhs"></param>
+    /// <param name="rhs"></param>
+    /// <returns></returns>
+    public static bool operator ==(ReadOnly2DArray<T> lhs, T[,]? rhs) => lhs.Equals(rhs);
+
+    /// <summary>
+    /// Determines if the two <see cref="ReadOnly2DArray{T}"/> instances do not wrap the same array.
+    /// </summary>
+    /// <param name="lhs"></param>
+    /// <param name="rhs"></param>
+    /// <returns></returns>
+    public static bool operator !=(ReadOnly2DArray<T> lhs, ReadOnly2DArray<T> rhs) => !lhs.Equals(rhs);
+
+    /// <summary>
+    /// Determines if the two <see cref="ReadOnly2DArray{T}"/> instances wrap the same array.
+    /// </summary>
+    /// <param name="lhs"></param>
+    /// <param name="rhs"></param>
+    /// <returns></returns>
+    public static bool operator ==(ReadOnly2DArray<T> lhs, ReadOnly2DArray<T> rhs) => lhs.Equals(rhs);
+
     /// <summary>
     /// Determines if this <see cref="ReadOnly2DArray{T}"/> wraps <paramref name="other"/>.
     /// </summary>
@@ -156,6 +195,13 @@ public readonly record struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnly
     /// <param name="other"></param>
     /// <returns></returns>
     public bool Equals(ReadOnly2DArray<T> other) => _array == other._array;
+
+    /// <inheritdoc/>
+    public override bool Equals(object obj) => obj switch
+    {
+        ReadOnly2DArray<T> other => Equals(other),
+        _ => false,
+    };
 
     /// <summary>
     /// Gets a hash code representing the array wrapped in the current instance.
