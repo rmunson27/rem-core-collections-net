@@ -125,7 +125,7 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// default comparer for type <typeparamref name="T"/>.
     /// </param>
     /// <returns></returns>
-    public bool SequenceEqual(IndexSelectionList<T>? other, IEqualityComparer<T>? elementComparer)
+    public bool SequenceEqual(IndexSelectionList<T>? other, IEqualityComparer<T>? elementComparer = null)
     {
         if (other is null) return false;
         else if (Count != other.Count) return false;
@@ -174,7 +174,7 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// default comparer for type <typeparamref name="T"/>.
     /// </param>
     /// <returns></returns>
-    public int GetSequenceHashCode(IEqualityComparer<T>? elementComparer)
+    public int GetSequenceHashCode(IEqualityComparer<T>? elementComparer = null)
     {
         elementComparer ??= EqualityComparer<T>.Default;
 
