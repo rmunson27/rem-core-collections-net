@@ -128,6 +128,17 @@ public readonly struct ReadOnly2DArray<T>
     [DoesNotReturnIfInstanceDefault]
     public ref readonly T this[long rowIndex, long columnIndex]
         => ref _array.ThrowDefaultIfNull()[rowIndex, columnIndex];
+
+    /// <summary>
+    /// Gets the element specified by the indices.
+    /// </summary>
+    /// <param name="rowIndex"></param>
+    /// <param name="columnIndex"></param>
+    /// <returns></returns>
+    /// <exception cref="DefaultInstanceException">This indexer was accessed on the default.</exception>
+    [DoesNotReturnIfInstanceDefault]
+    public ref readonly T this[int rowIndex, int columnIndex]
+        => ref _array.ThrowDefaultIfNull()[rowIndex, columnIndex];
     #endregion
 
     #region Constructor
