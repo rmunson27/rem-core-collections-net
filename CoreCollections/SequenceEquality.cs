@@ -44,12 +44,12 @@ public static class SequenceEquality
 
     /// <summary>
     /// Creates a <see cref="NestedEqualityComparer{TGeneric, TParameter}"/> that can compare
-    /// <see cref="IndexSelectionList{T}"/> instances based on sequence equality.
+    /// <see cref="Collections.IndexSelectionList{T}"/> instances based on sequence equality.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static NestedEqualityComparer<IndexSelectionList<T>, T> SelectedListComparer<T>()
-        => new SelectedListComparerType<T>();
+    public static NestedEqualityComparer<IndexSelectionList<T>, T> IndexSelectionList<T>()
+        => new IndexSelectionListComparerType<T>();
     #endregion
 
     #region GetHashCode
@@ -153,7 +153,7 @@ public static class SequenceEquality
         }
     }
 
-    private sealed class SelectedListComparerType<T> : NestedEqualityComparer<IndexSelectionList<T>, T>
+    private sealed class IndexSelectionListComparerType<T> : NestedEqualityComparer<IndexSelectionList<T>, T>
     {
         /// <inheritdoc/>
         public override bool Equals(
