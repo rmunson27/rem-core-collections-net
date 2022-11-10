@@ -125,16 +125,21 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
     /// </summary>
     /// <param name="other"></param>
-    /// <param name="comparer"></param>
+    /// <param name="elementComparer">
+    /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
+    /// default comparer for type <typeparamref name="T"/>.
+    /// </param>
     /// <returns></returns>
-    public bool SequenceEqual(IndexSelectionList<T>? other, IEqualityComparer<T>? comparer)
+    public bool SequenceEqual(IndexSelectionList<T>? other, IEqualityComparer<T>? elementComparer)
     {
         if (other is null) return false;
         if (Count != other.Count) return false;
 
-        comparer ??= EqualityComparer<T>.Default;
-        for (int i = 0; i < Count; i++) if (!comparer.Equals(GetElementAt(i), other.GetElementAt(i))) return false;
-
+        elementComparer ??= EqualityComparer<T>.Default;
+        for (int i = 0; i < Count; i++)
+        {
+            if (!elementComparer.Equals(GetElementAt(i), other.GetElementAt(i))) return false;
+        }
         return true;
     }
 
@@ -150,19 +155,22 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
     /// </summary>
     /// <param name="other"></param>
-    /// <param name="comparer"></param>
+    /// <param name="elementComparer">
+    /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
+    /// default comparer for type <typeparamref name="T"/>.
+    /// </param>
     /// <returns></returns>
-    public bool SequenceEqual(IEnumerable<T>? other, IEqualityComparer<T>? comparer)
+    public bool SequenceEqual(IEnumerable<T>? other, IEqualityComparer<T>? elementComparer)
     {
         if (other is null) return false;
 
-        comparer ??= EqualityComparer<T>.Default;
+        elementComparer ??= EqualityComparer<T>.Default;
 
         var otherEnumerator = other.GetEnumerator();
         for (int i = 0; i < Count; i++)
         {
             if (!otherEnumerator.MoveNext()) return false; // other is shorter than this
-            if (!comparer.Equals(otherEnumerator.Current, GetElementAt(i))) return false; // element mismatch
+            if (!elementComparer.Equals(otherEnumerator.Current, GetElementAt(i))) return false; // element mismatch
         }
         if (otherEnumerator.MoveNext()) return false; // other is longer than this
 
@@ -179,14 +187,17 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// Gets a sequence-based hash code for the current instance, using the specified
     /// <see cref="IEqualityComparer{T}"/> to get hash codes for the elements of the list.
     /// </summary>
-    /// <param name="comparer"></param>
+    /// <param name="elementComparer">
+    /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
+    /// default comparer for type <typeparamref name="T"/>.
+    /// </param>
     /// <returns></returns>
-    public int GetSequenceHashCode(IEqualityComparer<T>? comparer)
+    public int GetSequenceHashCode(IEqualityComparer<T>? elementComparer)
     {
-        comparer ??= EqualityComparer<T>.Default;
+        elementComparer ??= EqualityComparer<T>.Default;
 
         var hashCode = new HashCode();
-        foreach (var item in this) hashCode.Add(item, comparer);
+        foreach (var item in this) hashCode.Add(item, elementComparer);
         return hashCode.ToHashCode();
     }
     #endregion
