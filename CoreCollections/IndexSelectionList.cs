@@ -119,7 +119,7 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool SequenceEqual(IndexSelectionList<T>? other) => SequenceEqual(other, EqualityComparer<T>.Default);
+    public bool SequenceEqual(IndexSelectionList<T>? other) => SequenceEqual(other, null);
 
     /// <summary>
     /// Determines if this instance is sequence-equal to another <see cref="IndexSelectionList{T}"/>, using the specified
@@ -149,7 +149,7 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool SequenceEqual(IEnumerable<T>? other) => SequenceEqual(other, EqualityComparer<T>.Default);
+    public bool SequenceEqual(IEnumerable<T>? other) => SequenceEqual(other, null);
 
     /// <summary>
     /// Determines if this instance is sequence-equal to another <see cref="IEnumerable{T}"/>, using the specified
@@ -182,7 +182,7 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// Gets a sequence-based hash code for the current instance.
     /// </summary>
     /// <returns></returns>
-    public int GetSequenceHashCode() => GetSequenceHashCode(EqualityComparer<T>.Default);
+    public int GetSequenceHashCode() => GetSequenceHashCode(null);
 
     /// <summary>
     /// Gets a sequence-based hash code for the current instance, using the specified
