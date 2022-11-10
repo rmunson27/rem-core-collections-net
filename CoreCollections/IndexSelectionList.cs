@@ -116,23 +116,21 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     #region Sequence Equality
     #region Public
     /// <summary>
-    /// Determines if the two <see cref="IndexSelectionList{T}"/> instances passed in are sequence-equal,
-    /// using the specified <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
+    /// Determines if this instance is sequence-equal to another <see cref="IndexSelectionList{T}"/>, using the
+    /// specified <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
     /// </summary>
-    /// <remarks>
-    /// This method will return <see langword="true"/> if both <paramref name="lhs"/> and <paramref name="rhs"/>
-    /// are <see langword="null"/>.
-    /// </remarks>
-    /// <param name="lhs"></param>
-    /// <param name="rhs"></param>
+    /// <param name="other"></param>
     /// <param name="elementComparer">
     /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
     /// default comparer for type <typeparamref name="T"/>.
     /// </param>
     /// <returns></returns>
-    public static bool SequenceEqual(
-        IndexSelectionList<T>? lhs, IndexSelectionList<T>? rhs, IEqualityComparer<T>? elementComparer = null)
-        => lhs is null ? rhs is null : lhs.SequenceEqual(rhs, elementComparer);
+    public bool SequenceEqual(IndexSelectionList<T>? other, IEqualityComparer<T>? elementComparer)
+    {
+        if (other is null) return false;
+        else if (Count != other.Count) return false;
+        else return SequenceEqualOtherOfEqualLength(other, elementComparer.DefaultIfNull());
+    }
 
     /// <summary>
     /// Determines if this instance is sequence-equal to another <see cref="IEnumerable{T}"/>, using the specified
@@ -147,6 +145,9 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     public bool SequenceEqual(IEnumerable<T>? other, IEqualityComparer<T>? elementComparer = null) => other switch
     {
         // Attempt to find a more efficient way to compare than the raw enumerable method
+        null => false,
+        IndexSelectionList<T> list
+            => Count == list.Count && SequenceEqualOtherOfEqualLength(list, elementComparer.DefaultIfNull()),
         IList<T> list
             => Count == list.Count && SequenceEqualListOfEqualLength(list, elementComparer.DefaultIfNull()),
         IReadOnlyList<T> list
@@ -155,7 +156,6 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
             => Count == coll.Count && SequenceEqualRawEnumerableOfEqualLength(coll, elementComparer.DefaultIfNull()),
         IReadOnlyCollection<T> coll
             => Count == coll.Count && SequenceEqualRawEnumerableOfEqualLength(coll, elementComparer.DefaultIfNull()),
-        null => false,
         _ => SequenceEqualRawEnumerable(other, elementComparer.DefaultIfNull()),
     };
 
@@ -185,6 +185,16 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     #endregion
 
     #region Helpers
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private bool SequenceEqualOtherOfEqualLength(IndexSelectionList<T> other, IEqualityComparer<T> elementComparer)
+    {
+        for (int i = 0; i < Count; i++)
+        {
+            if (!elementComparer.Equals(GetElementAt(i), other.GetElementAt(i))) return false;
+        }
+        return true;
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool SequenceEqualReadOnlyListOfEqualLength(IReadOnlyList<T> other, IEqualityComparer<T> elementComparer)
     {
