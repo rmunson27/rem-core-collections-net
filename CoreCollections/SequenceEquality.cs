@@ -16,6 +16,7 @@ namespace Rem.Core.Collections;
 public static class SequenceEquality
 {
     #region Methods
+    #region Comparers
     /// <summary>
     /// Creates a <see cref="NestedEqualityComparer{TGeneric, TParameter}"/> that can compare
     /// <see cref="IEnumerable{T}"/> instances based on sequence equality.
@@ -49,7 +50,9 @@ public static class SequenceEquality
     /// <returns></returns>
     public static NestedEqualityComparer<IndexSelectionList<T>, T> SelectedListComparer<T>()
         => new SelectedListComparerType<T>();
+    #endregion
 
+    #region GetHashCode
     /// <summary>
     /// Gets a hash code for the <see cref="IEnumerable{T}"/> passed in based on its structure.
     /// </summary>
@@ -91,6 +94,7 @@ public static class SequenceEquality
         foreach (var item in items) hashCode.Add(nestedComparer.GetHashCode(item!));
         return hashCode.ToHashCode();
     }
+    #endregion
     #endregion
 
     #region Types
