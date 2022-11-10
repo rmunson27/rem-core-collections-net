@@ -143,11 +143,15 @@ public readonly record struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnly
 
     #region Methods
     #region Equality
-    /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
+    /// <summary>
+    /// Determines if this <see cref="ReadOnly2DArray{T}"/> wraps the same array as <paramref name="other"/>.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
     public bool Equals(ReadOnly2DArray<T> other) => _array == other._array;
 
     /// <summary>
-    /// Gets a hash code representing the current instance.
+    /// Gets a hash code representing the array wrapped in the current instance.
     /// </summary>
     /// <returns></returns>
     [DoesNotReturnIfInstanceDefault]
