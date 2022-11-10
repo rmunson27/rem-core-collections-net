@@ -142,28 +142,29 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// default comparer for type <typeparamref name="T"/>.
     /// </param>
     /// <returns></returns>
-    public bool SequenceEqual(IEnumerable<T>? other, IEqualityComparer<T>? elementComparer = null) => other switch
+    public bool SequenceEqual(IEnumerable<T>? other, IEqualityComparer<T>? elementComparer = null)
     {
-        // Attempt to find a more efficient way to compare than the raw enumerable method
-        null => false,
-        IndexSelectionList<T> list
-            => Count == list.Count && SequenceEqualOtherOfEqualLength(list, elementComparer.DefaultIfNull()),
-        IList<T> list
-            => Count == list.Count && SequenceEqualListOfEqualLength(list, elementComparer.DefaultIfNull()),
-        IReadOnlyList<T> list
-            => Count == list.Count && SequenceEqualReadOnlyListOfEqualLength(list, elementComparer.DefaultIfNull()),
-        ICollection<T> coll
-            => Count == coll.Count && SequenceEqualRawEnumerableOfEqualLength(coll, elementComparer.DefaultIfNull()),
-        IReadOnlyCollection<T> coll
-            => Count == coll.Count && SequenceEqualRawEnumerableOfEqualLength(coll, elementComparer.DefaultIfNull()),
-        _ => SequenceEqualRawEnumerable(other, elementComparer.DefaultIfNull()),
-    };
-
-    /// <summary>
-    /// Gets a sequence-based hash code for the current instance.
-    /// </summary>
-    /// <returns></returns>
-    public int GetSequenceHashCode() => GetSequenceHashCode(null);
+        if (other is null) return false;
+        else
+        {
+            elementComparer ??= EqualityComparer<T>.Default;
+            return other switch
+            {
+                // Attempt to find a more efficient way to compare than the raw enumerable method
+                IndexSelectionList<T> list
+                    => Count == list.Count && SequenceEqualOtherOfEqualLength(list, elementComparer),
+                IList<T> list
+                    => Count == list.Count && SequenceEqualListOfEqualLength(list, elementComparer),
+                IReadOnlyList<T> list
+                    => Count == list.Count && SequenceEqualReadOnlyListOfEqualLength(list, elementComparer),
+                ICollection<T> coll
+                    => Count == coll.Count && SequenceEqualRawEnumerableOfEqualLength(coll, elementComparer),
+                IReadOnlyCollection<T> coll
+                    => Count == coll.Count && SequenceEqualRawEnumerableOfEqualLength(coll, elementComparer),
+                _ => SequenceEqualRawEnumerable(other, elementComparer),
+            };
+        }
+    }
 
     /// <summary>
     /// Gets a sequence-based hash code for the current instance, using the specified
