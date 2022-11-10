@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Rem.Core.Attributes;
+using Rem.Core.ComponentModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +16,18 @@ namespace Rem.Core.Collections.Enumeration;
 /// This can be used to avoid creating an object when only a struct is needed for iterating through an array.
 /// </remarks>
 /// <typeparam name="TElement">The type of elements of the array.</typeparam>
-public struct ArrayEnumerator<TElement>
+public struct ArrayEnumerator<TElement> : IDefaultableStruct
 {
+    /// <inheritdoc/>
+    public bool IsDefault => _array is null;
+
     /// <summary>
     /// Gets the index of the current element.
     /// </summary>
     public long CurrentIndex => _currentIndex;
 
     /// <inheritdoc cref="IEnumerator{T}.Current"/>
+    [DoesNotReturnIfInstanceDefault]
     public TElement Current
     {
         get
@@ -49,11 +55,13 @@ public struct ArrayEnumerator<TElement>
     /// <exception cref="ArgumentNullException"><paramref name="array"/> was <see langword="null"/>.</exception>
     public ArrayEnumerator(TElement[] array)
     {
+        if (array is null) throw new ArgumentNullException(nameof(array));
         _array = array;
         _currentIndex = -1;
     }
 
     /// <inheritdoc cref="IEnumerator.MoveNext"/>
+    [DoesNotReturnIfInstanceDefault]
     public bool MoveNext()
     {
         if (_array.LongLength == 0) return false;
