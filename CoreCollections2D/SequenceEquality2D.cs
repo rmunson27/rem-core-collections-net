@@ -44,8 +44,7 @@ public static class SequenceEquality2D
 
     #region Equals
     /// <summary>
-    /// Determines if the two <see cref="ReadOnly2DArray{T}"/> instances are equal according to their
-    /// 2-dimensional structure.
+    /// Determines if the 2-dimensional arrays passed in are equal according to their 2-dimensional structure.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="x"></param>
@@ -57,31 +56,17 @@ public static class SequenceEquality2D
     /// <returns></returns>
     public static bool Equals<T>(
         ReadOnly2DArray<T> x, ReadOnly2DArray<T> y, IEqualityComparer<T>? nestedComparer = null)
-    {
-        // Eliminate default cases
-        if (x.IsDefault) return y.IsDefault;
-        else if (y.IsDefault) return false;
+        => Equals(x._array, y._array, nestedComparer);
 
-        // Default the comparer if necessary
-        nestedComparer ??= EqualityComparer<T>.Default;
+    /// <inheritdoc cref="Equals{T}(ReadOnly2DArray{T}, ReadOnly2DArray{T}, IEqualityComparer{T}?)"/>
+    public static bool Equals<T>(ReadOnly2DArray<T> x, T[,]? y, IEqualityComparer<T>? nestedComparer = null)
+        => Equals(x._array, y, nestedComparer);
 
-        // Eliminate the case of mismatching dimensions
-        if (x.RowCount != y.RowCount || x.ColumnCount != y.ColumnCount) return false;
+    /// <inheritdoc cref="Equals{T}(ReadOnly2DArray{T}, ReadOnly2DArray{T}, IEqualityComparer{T}?)"/>
+    public static bool Equals<T>(T[,]? x, ReadOnly2DArray<T> y, IEqualityComparer<T>? nestedComparer = null)
+        => Equals(x, y._array, nestedComparer);
 
-        return Array2D.Enumerate(x).SequenceEqual(Array2D.Enumerate(y), nestedComparer);
-    }
-
-    /// <summary>
-    /// Determines if the 2-dimensional arrays passed in are equal according to their 2-dimensional structure.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="nestedComparer">
-    /// An <see cref="EqualityComparer{T}"/> to use to compare elements of type <typeparamref name="T"/>, or
-    /// <see langword="null"/> to use the default comparer.
-    /// </param>
-    /// <returns></returns>
+    /// <inheritdoc cref="Equals{T}(ReadOnly2DArray{T}, ReadOnly2DArray{T}, IEqualityComparer{T}?)"/>
     public static bool Equals<T>(T[,]? x, T[,]? y, IEqualityComparer<T>? nestedComparer = null)
     {
         // Default the comparer if necessary
