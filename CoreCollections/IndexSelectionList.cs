@@ -171,7 +171,7 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
     /// <see cref="IEqualityComparer{T}"/> to get hash codes for the elements of the list.
     /// </summary>
     /// <param name="elementComparer">
-    /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
+    /// The equality comparer to use to compute hash codes for the elements, or <see langword="null"/> to use the
     /// default comparer for type <typeparamref name="T"/>.
     /// </param>
     /// <returns></returns>
