@@ -3,6 +3,7 @@ using Rem.Core.Collections.Enumeration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -130,6 +131,29 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
         if (other is null) return false;
         else if (Count != other.Count) return false;
         else return SequenceEqualOtherOfEqualLength(other, elementComparer.DefaultIfNull());
+    }
+
+    /// <summary>
+    /// Determines if this instance is sequence-equal to the <see cref="ImmutableArray{T}"/> passed in,
+    /// using the specified <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <param name="elementComparer">
+    /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
+    /// default comparer for type <typeparamref name="T"/>.
+    /// </param>
+    /// <returns></returns>
+    public bool SequenceEqual(ImmutableArray<T> other, IEqualityComparer<T>? elementComparer = null)
+    {
+        if (other.IsDefault) return false;
+        else if (Count != other.Length) return false;
+
+        elementComparer ??= EqualityComparer<T>.Default;
+        for (int i = 0; i < Count; i++)
+        {
+            if (!elementComparer.Equals(GetElementAt(i), other[i])) return false;
+        }
+        return true;
     }
 
     /// <summary>
