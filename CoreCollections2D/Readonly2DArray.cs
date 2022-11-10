@@ -144,6 +144,13 @@ public readonly record struct ReadOnly2DArray<T> : IDefaultableStruct, IReadOnly
     #region Methods
     #region Equality
     /// <summary>
+    /// Determines if this <see cref="ReadOnly2DArray{T}"/> wraps <paramref name="other"/>.
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public bool Equals(T[,]? other) => _array == other;
+
+    /// <summary>
     /// Determines if this <see cref="ReadOnly2DArray{T}"/> wraps the same array as <paramref name="other"/>.
     /// </summary>
     /// <param name="other"></param>
