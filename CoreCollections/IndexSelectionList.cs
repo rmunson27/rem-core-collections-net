@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 namespace Rem.Core.Collections;
 
 /// <summary>
-/// A simple concrete <see cref="IndexSelectionList{T}"/> implementation defined by a selector function.
+/// A simple concrete <see cref="IndexSelectionList{T}"/> implementation defined by a selector function that is passed
+/// into the constructor.
 /// </summary>
 /// <inheritdoc/>
 public class IndexSelectorList<T> : IndexSelectionList<T>
