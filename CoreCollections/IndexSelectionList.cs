@@ -204,7 +204,7 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
         elementComparer ??= EqualityComparer<T>.Default;
 
         var hashCode = new HashCode();
-        foreach (var item in this) hashCode.Add(item, elementComparer);
+        for (int i = 0; i < Count; i++) hashCode.Add(GetElementAt(i), elementComparer);
         return hashCode.ToHashCode();
     }
     #endregion
