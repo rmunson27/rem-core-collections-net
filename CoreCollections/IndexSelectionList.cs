@@ -115,6 +115,41 @@ public abstract class IndexSelectionList<T> : IReadOnlyList<T>
 
     #region Sequence Equality
     /// <summary>
+    /// Determines if the two lists passed in are sequence-equal, using the specified
+    /// <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
+    /// </summary>
+    /// <param name="lhs"></param>
+    /// <param name="rhs"></param>
+    /// <param name="elementComparer">
+    /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
+    /// default comparer for type <typeparamref name="T"/>.
+    /// </param>
+    /// <returns></returns>
+    public static bool SequenceEqual(
+        IndexSelectionList<T>? lhs, IndexSelectionList<T>? rhs, IEqualityComparer<T>? elementComparer = null)
+        => lhs is null ? rhs is null : lhs.SequenceEqual(rhs, elementComparer);
+
+    /// <inheritdoc cref="SequenceEqual(IndexSelectionList{T}?, IEnumerable{T}?, IEqualityComparer{T}?)"/>
+    public static bool SequenceEqual(
+        IEnumerable<T>? lhs, IndexSelectionList<T>? rhs, IEqualityComparer<T>? elementComparer = null)
+        => SequenceEqual(rhs, lhs, elementComparer);
+
+    /// <summary>
+    /// Determines if the two lists passed in are sequence-equal, using the specified
+    /// <see cref="IEqualityComparer{T}"/> to compare equality of the elements.
+    /// </summary>
+    /// <param name="lhs"></param>
+    /// <param name="rhs"></param>
+    /// <param name="elementComparer">
+    /// The equality comparer to use to compare equality for the elements, or <see langword="null"/> to use the
+    /// default comparer for type <typeparamref name="T"/>.
+    /// </param>
+    /// <returns></returns>
+    public static bool SequenceEqual(
+        IndexSelectionList<T>? lhs, IEnumerable<T>? rhs, IEqualityComparer<T>? elementComparer = null)
+        => lhs is null ? rhs is null : lhs.SequenceEqual(rhs, elementComparer);
+
+    /// <summary>
     /// Determines if this instance is sequence-equal to another <see cref="IndexSelectionList{T}"/>.
     /// </summary>
     /// <param name="other"></param>
