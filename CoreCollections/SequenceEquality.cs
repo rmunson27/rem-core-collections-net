@@ -44,7 +44,7 @@ public static class SequenceEquality
 
     /// <summary>
     /// Creates a <see cref="NestedEqualityComparer{TGeneric, TParameter}"/> that can compare
-    /// <see cref="Collections.IndexSelectionList{T}"/> instances based on sequence equality.
+    /// <see cref="IndexSelectionList{T}"/> instances based on sequence equality.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
