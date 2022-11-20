@@ -85,7 +85,8 @@ public static class SequenceEquality
     /// </param>
     /// <returns></returns>
     /// <exception cref="StructArgumentDefaultException"><paramref name="items"/> was default.</exception>
-    public static int GetHashCode<T>(ImmutableArray<T> items, IEqualityComparer<T>? nestedComparer = null)
+    public static int GetHashCode<T>(
+        [NonDefaultableStruct] ImmutableArray<T> items, IEqualityComparer<T>? nestedComparer = null)
     {
         if (items.IsDefault) throw new StructArgumentDefaultException(nameof(items));
         nestedComparer ??= EqualityComparer<T>.Default;
@@ -102,7 +103,7 @@ public static class SequenceEquality
     {
         /// <inheritdoc/>
         public override bool Equals(
-            [AllowNull] IEnumerable<T> x, [AllowNull] IEnumerable<T> y, IEqualityComparer<T> nestedComparer)
+            IEnumerable<T>? x, IEnumerable<T>? y, IEqualityComparer<T> nestedComparer)
         {
             // Error checking
             if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
@@ -129,7 +130,7 @@ public static class SequenceEquality
     {
         /// <inheritdoc/>
         public override bool Equals(
-            [AllowDefault] ImmutableArray<T> x, [AllowDefault] ImmutableArray<T> y,
+            [DefaultableStruct] ImmutableArray<T> x, [DefaultableStruct] ImmutableArray<T> y,
             IEqualityComparer<T> nestedComparer)
         {
             // Error checking
@@ -144,7 +145,7 @@ public static class SequenceEquality
 
         /// <inheritdoc/>
         public override int GetHashCode(
-            [DisallowDefault, DisallowNull] ImmutableArray<T> obj, IEqualityComparer<T> nestedComparer)
+            [NonDefaultableStruct] ImmutableArray<T> obj, IEqualityComparer<T> nestedComparer)
         {
             // Error checking
             if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
