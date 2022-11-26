@@ -70,6 +70,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Rem.Core.Attributes" Version="1.4.0" />
 		<PackageReference Include="Rem.Core.ComponentModel" Version="1.2.3" />
 	</ItemGroup>
 
