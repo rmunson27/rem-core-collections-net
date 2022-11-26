@@ -32,7 +32,7 @@ public class ReadOnlyContainer<T> : ICollection<T>, IReadOnlyContainer<T>
     /// <exception cref="ArgumentNullException"><paramref name="collection"/> was <see langword="null"/>.</exception>
     public ReadOnlyContainer(ICollection<T> collection)
     {
-        if (collection is null) throw new ArgumentNullException();
+        if (collection is null) throw new ArgumentNullException(nameof(collection));
         _collection = collection;
     }
 
