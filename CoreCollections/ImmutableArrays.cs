@@ -37,7 +37,7 @@ public static class ImmutableArrays
 
     #region Sequence Equality
     /// <summary>
-    /// Determines if the currnet <see cref="ImmutableArray{T}"/> is equal to the specified
+    /// Determines if the current <see cref="ImmutableArray{T}"/> is equal to the specified
     /// <see cref="ReadOnlyArray{T}"/> by comparing their elements.
     /// </summary>
     /// <typeparam name="TParent"></typeparam>
@@ -68,7 +68,7 @@ public static class ImmutableArrays
         return true;
     }
 
-    #region GetSequenceHashCode
+    #region Sequence Hash Code
     /// <summary>
     /// Gets a hash code for the current <see cref="ImmutableArray{T}"/> passed in based on the sequence of
     /// its elements.
