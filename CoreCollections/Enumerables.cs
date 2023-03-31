@@ -13,6 +13,12 @@ namespace Rem.Core.Collections;
 public static class Enumerables
 {
     /// <summary>
+    /// Gets a <see cref="NotSupportedException"/> that can be thrown when an attempt is made to mutate a
+    /// readonly collection.
+    /// </summary>
+    public static NotSupportedException MutationNotSupported => new("Collection is read-only.");
+
+    /// <summary>
     /// Maps a selector over the current <see cref="IEnumerable{T}"/>, returning a new array containing
     /// the results.
     /// </summary>
