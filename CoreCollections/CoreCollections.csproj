@@ -3,9 +3,7 @@
 	<PropertyGroup Label="Identity">
 		<Product>Rem.Core.Collections</Product>
 		<PackageId>Rem.Core.Collections</PackageId>
-		<Description>
-			A core set of collection utilities for .NET.
-		</Description>
+		<Description>A core set of collection utilities for .NET.</Description>
 		<RootNamespace>Rem.Core.Collections</RootNamespace>
 		<Version>1.1</Version>
 		<Authors>Richard E. Munson</Authors>
@@ -18,9 +16,7 @@
 	<PropertyGroup Label="Output">
 		<TargetFrameworks>net461;netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
 		<OutputType>Library</OutputType>
-		<PackageReleaseNotes>
-			Added collection base class that maps a range of indices to values in the collection using a selector function.
-		</PackageReleaseNotes>
+		<PackageReleaseNotes>Added collection base class that maps a range of indices to values in the collection using a selector function.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Language">
@@ -69,6 +65,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+		<PackageReference Include="System.ValueTuple" Version="4.5.0"/>
 
 		<Using Remove="System.Net.Http" /><!-- Remove this using from auto-generation since this package is not used -->
 	</ItemGroup>
