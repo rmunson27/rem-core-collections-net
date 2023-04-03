@@ -39,13 +39,13 @@ public class ReadOnlyContainer<T> : ICollection<T>, IReadOnlyContainer<T>
     [DoesNotReturn]
     void ICollection<T>.Add(T item)
     {
-        throw CollectionHelpers.ReadOnlyMutationAttempted;
+        throw Enumerables.MutationNotSupported;
     }
 
     [DoesNotReturn]
     void ICollection<T>.Clear()
     {
-        throw CollectionHelpers.ReadOnlyMutationAttempted;
+        throw Enumerables.MutationNotSupported;
     }
 
     /// <inheritdoc/>
@@ -63,7 +63,7 @@ public class ReadOnlyContainer<T> : ICollection<T>, IReadOnlyContainer<T>
     [DoesNotReturn]
     bool ICollection<T>.Remove(T item)
     {
-        throw CollectionHelpers.ReadOnlyMutationAttempted;
+        throw Enumerables.MutationNotSupported;
     }
 
     IEnumerator IEnumerable.GetEnumerator() => (_collection as IEnumerable).GetEnumerator();
