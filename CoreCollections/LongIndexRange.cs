@@ -18,6 +18,13 @@ namespace Rem.Core.Collections;
 /// <param name="End">The exclusive end index of the range.</param>
 public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
 {
+    #region Constants
+    /// <summary>
+    /// A <see cref="LongRange"/> that spans the entire collection, from the start to the end.
+    /// </summary>
+    public static readonly LongRange All = new(in LongIndex.Start, in LongIndex.End);
+    #endregion
+
     #region Properties
     /// <summary>
     /// Determines if this instance is a degenerate case.
@@ -52,7 +59,7 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     /// <returns>
     /// A <see cref="LongRange"/> that starts at <paramref name="Start"/> and ends at the end of the collection.
     /// </returns>
-    public static LongRange StartAt(in LongIndex Start) => new(in Start, in LongIndex.End);
+    public static LongRange StartAt(LongIndex Start) => new(Start, LongIndex.End);
 
     /// <summary>
     /// Creates a new <see cref="LongRange"/> that starts at the start of the collection and ends at the
@@ -62,7 +69,7 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     /// <returns>
     /// A <see cref="LongRange"/> that starts at the start of the collection and ends at <paramref name="End"/>.
     /// </returns>
-    public static LongRange EndAt(in LongIndex End) => new(in LongIndex.Start, in End);
+    public static LongRange EndAt(LongIndex End) => new(LongIndex.Start, End);
 
     /// <summary>
     /// Constructs a new <see cref="LongRange"/> with the specified start index and fixed count.
@@ -77,10 +84,10 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     /// A new <see cref="LongRange"/> starting at <paramref name="Start"/> and containing <paramref name="Count"/> indices.
     /// </returns>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="Count"/> was negative.</exception>
-    public static LongRange FromStartAndCount(in LongIndex Start, long Count)
+    public static LongRange FromStartAndCount(LongIndex Start, long Count)
     {
         if (Count < 0) throw new ArgumentOutOfRangeException(nameof(Count), Count, "Count cannot be negative.");
-        return new(in Start, Start with { Value = Start.IsFromEnd ? Start.Value - Count : Start.Value + Count });
+        return new(in Start, Start.ShiftBy(Count));
     }
     #endregion
 
@@ -488,41 +495,33 @@ public static class LongRangeExtensions
 /// <summary>
 /// A type that can be used to index a collection either from the beginning or the end.
 /// </summary>
-/// <param name="Value">The value of the index.</param>
-/// <param name="IsFromEnd">Indicates whether or not the index is from the end of a collection.</param>
-/// <exception cref="ArgumentOutOfRangeException"><paramref name="Value"/> was negative.</exception>
-public readonly record struct LongIndex(long Value, bool IsFromEnd = false)
+public readonly record struct LongIndex
 {
     /// <summary>
     /// A <see cref="LongIndex"/> that points beyond the last element in a collection.
     /// </summary>
-    public static readonly LongIndex End = new(0, IsFromEnd: true);
+    public static readonly LongIndex End = new(~0L);
 
     /// <summary>
     /// A <see cref="LongIndex"/> that points to the first element in a collection.
     /// </summary>
-    public static readonly LongIndex Start = new(0);
+    public static readonly LongIndex Start = new(0L);
 
     /// <summary>
     /// Indicates whether or not the value is from the start of a collection.
     /// </summary>
-    public bool IsFromStart => !IsFromEnd;
+    public bool IsFromStart => _value >= 0;
+
+    /// <summary>
+    /// Indicates whether or not the value is from the end of the collection.
+    /// </summary>
+    public bool IsFromEnd => _value < 0;
 
     /// <summary>
     /// Gets the value of this <see cref="LongIndex"/>.
     /// </summary>
-    public long Value
-    {
-        get => _value;
-        init => _value = NonNegativeValueOrThrow(Value);
-    }
-    private readonly long _value = NonNegativeValueOrThrow(Value);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static long NonNegativeValueOrThrow(long Value)
-        => Value >= 0
-            ? Value
-            : throw new ArgumentOutOfRangeException(nameof(Value), Value, "Value cannot be negative.");
+    public long Value => _value < 0 ? ~_value : _value;
+    internal readonly long _value;
 
     /// <summary>
     /// Creates a new <see cref="LongIndex"/> from the end of a collection at the specified index position.
@@ -539,6 +538,25 @@ public readonly record struct LongIndex(long Value, bool IsFromEnd = false)
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="Value"/> was negative.</exception>
     public static LongIndex FromStart(long Value) => new(Value, IsFromEnd: false);
+
+    /// <summary>
+    /// Constructs a new instance of the <see cref="LongIndex"/> struct from the index value and whether or not the
+    /// instance is from the end.
+    /// </summary>
+    /// <param name="Value"></param>
+    /// <param name="IsFromEnd"></param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="Value"/> was negative.</exception>
+    public LongIndex(long Value, bool IsFromEnd)
+    {
+        if (Value < 0) throw new ArgumentOutOfRangeException(nameof(Value), Value, "Value cannot be negative.");
+        _value = IsFromEnd ? ~Value : Value;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public LongIndex(long Value)
+    {
+        _value = Value;
+    }
 
     /// <summary>
     /// Calculates the offset of this instance from the start of a collection of
@@ -607,6 +625,29 @@ public readonly record struct LongIndex(long Value, bool IsFromEnd = false)
         return offset;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal LongIndex ShiftBy(long amount)
+    {
+        if (IsFromEnd)
+        {
+            var newValue = _value - amount;
+            if (newValue >= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Value), ~newValue, "Value cannot be negative.");
+            }
+            return new(newValue);
+        }
+        else
+        {
+            var newValue = _value + amount;
+            if (newValue < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(Value), newValue, "Value cannot be negative.");
+            }
+            return new(newValue);
+        }
+    }
+
     /// <summary>
     /// Provides the logic of getting an offset for the index without checking for exceptional cases.
     /// </summary>
@@ -616,20 +657,20 @@ public readonly record struct LongIndex(long Value, bool IsFromEnd = false)
     /// <param name="collectionLength"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal long GetOffsetUnchecked(long collectionLength) => IsFromEnd ? collectionLength - Value : Value;
+    internal long GetOffsetUnchecked(long collectionLength) => _value < 0 ? collectionLength + _value + 1 : _value;
 
     /// <summary>
     /// Determines whether this <see cref="LongIndex"/> is equal to another.
     /// </summary>
     /// <param name="other"></param>
     /// <returns></returns>
-    public bool Equals(LongIndex other) => _value == other._value && IsFromEnd == other.IsFromEnd;
+    public bool Equals(LongIndex other) => _value == other._value;
 
     /// <summary>
     /// Gets a hash code representing this <see cref="LongIndex"/>.
     /// </summary>
     /// <returns></returns>
-    public override int GetHashCode() => HashCode.Combine(_value, IsFromEnd);
+    public override int GetHashCode() => _value.GetHashCode();
 
     /// <summary>
     /// Gets a string representing this <see cref="LongIndex"/>.
@@ -637,7 +678,10 @@ public readonly record struct LongIndex(long Value, bool IsFromEnd = false)
     /// <returns></returns>
     public override string ToString() => $"[{FormattedValue}]";
 
-    internal string FormattedValue => $"{(IsFromEnd ? "^" : "")}{Value}";
+    /// <summary>
+    /// Gets a formatted string representing the value of this <see cref="LongIndex"/>.
+    /// </summary>
+    internal string FormattedValue => IsFromEnd ? $"^{~_value}" : _value.ToString();
 
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
     /// <summary>
