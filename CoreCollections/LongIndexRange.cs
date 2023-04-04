@@ -81,9 +81,13 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     /// <param name="Start">The inclusive start index of the range.</param>
     /// <param name="Count">The number of elements in the range.</param>
     /// <returns>
-    /// A new <see cref="LongRange"/> starting at <paramref name="Start"/> and containing <paramref name="Count"/> indices.
+    /// A new <see cref="LongRange"/> starting at <paramref name="Start"/> and containing
+    /// <paramref name="Count"/> indices.
     /// </returns>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="Count"/> was negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <paramref name="Count"/> was negative, or <paramref name="Start"/> and <paramref name="Count"/> indicates an
+    /// end index with a negative value.
+    /// </exception>
     public static LongRange FromStartAndCount(LongIndex Start, long Count)
     {
         if (Count < 0) throw new ArgumentOutOfRangeException(nameof(Count), Count, "Count cannot be negative.");
