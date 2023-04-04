@@ -45,6 +45,26 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
 
     #region Factories
     /// <summary>
+    /// Creates a new <see cref="LongRange"/> that starts at the specified <see cref="LongIndex"/> and ends at the end
+    /// of the collection.
+    /// </summary>
+    /// <param name="Start">The inclusive index the range should start at.</param>
+    /// <returns>
+    /// A <see cref="LongRange"/> that starts at <paramref name="Start"/> and ends at the end of the collection.
+    /// </returns>
+    public static LongRange StartAt(in LongIndex Start) => new(in Start, in LongIndex.End);
+
+    /// <summary>
+    /// Creates a new <see cref="LongRange"/> that starts at the start of the collection and ends at the
+    /// specified index.
+    /// </summary>
+    /// <param name="End">The non-inclusive index the range should end at.</param>
+    /// <returns>
+    /// A <see cref="LongRange"/> that starts at the start of the collection and ends at <paramref name="End"/>.
+    /// </returns>
+    public static LongRange EndAt(in LongIndex End) => new(in LongIndex.Start, in End);
+
+    /// <summary>
     /// Constructs a new <see cref="LongRange"/> with the specified start index and fixed count.
     /// </summary>
     /// <remarks>
@@ -60,7 +80,7 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     public static LongRange FromStartAndCount(in LongIndex Start, long Count)
     {
         if (Count < 0) throw new ArgumentOutOfRangeException(nameof(Count), Count, "Count cannot be negative.");
-        return new(Start, Start with { Value = Start.IsFromEnd ? Start.Value - Count : Start.Value + Count });
+        return new(in Start, Start with { Value = Start.IsFromEnd ? Start.Value - Count : Start.Value + Count });
     }
     #endregion
 
@@ -69,16 +89,16 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     /// Determines whether or not this instance has a fixed count regardless of the length of the collection being
     /// indexed, provided the collection is long enough to contain the range.
     /// </summary>
+    /// <remarks>
+    /// This method will return <see langword="true"/> for degenerate instances, as they do have a calculable fixed
+    /// count - it is just negative, which is not applicable to most non-exceptional cases.
+    /// </remarks>
     /// <returns>
     /// Whether or not the collection-independent count can be computed.
     /// If it returns, this method will return <see langword="true"/> if and only if both <see cref="Start"/> and
     /// <see cref="End"/> are from the same side of the collection.
     /// </returns>
-    /// <exception cref="DegenerateRangeException">
-    /// This instance is degenerate, i.e. its count will always be negative regardless of the length of any collection
-    /// being indexed.
-    /// </exception>
-    public bool HasFixedCount() => this.ThrowIfDegenerate().Start.IsFromEnd == End.IsFromEnd;
+    public bool HasFixedCount() => Start.IsFromEnd == End.IsFromEnd;
 
     /// <summary>
     /// Determines whether or not this instance has a fixed count regardless of the length of the collection being
@@ -86,21 +106,19 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     /// If so, the fixed count will be returned in an <see langword="out"/> parameter.
     /// </summary>
     /// <remarks>
-    /// If this method returns <see langword="true"/>, this instance has a fixed count of indices independent of the
-    /// length of any collection being indexed, given that the collection is long enough to contain the instance.
+    /// This method will return <see langword="true"/> for degenerate instances, as they do have a calculable fixed
+    /// count - it is just negative, which is not applicable to most non-exceptional cases.
     /// </remarks>
     /// <param name="fixedCount">
     /// An <see langword="out"/> parameter to set to the collection-independent count, if it can be computed.
+    /// <para/>
+    /// If this instance is degenerate, this will be a negative number.
     /// </param>
     /// <returns>
     /// Whether or not the collection-independent count can be computed.
     /// If it returns, this method will return <see langword="true"/> if and only if both <see cref="Start"/> and
     /// <see cref="End"/> are from the same side of the collection.
     /// </returns>
-    /// <exception cref="DegenerateRangeException">
-    /// This instance is degenerate, i.e. its count will always be negative regardless of the length of any collection
-    /// being indexed.
-    /// </exception>
     public bool HasFixedCount(out long fixedCount)
     {
         long rawCount;
@@ -108,7 +126,7 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
         else if (Start.IsFromStart && End.IsFromStart) rawCount = End.Value - Start.Value;
         else return Try.Failure(out fixedCount); // This cannot be a degenerate case
 
-        return rawCount < 0 ? throw new DegenerateRangeException() : Try.Success(out fixedCount, rawCount);
+        return Try.Success(out fixedCount, rawCount);
     }
 
     /// <summary>
@@ -160,7 +178,7 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     /// being indexed.
     /// </exception>
     public long GetClampedOffset(long collectionLength)
-        => this.ThrowIfDegenerate().GetOffsetUnchecked(collectionLength.ThrowIfCollectionLengthNegative())
+        => GetOffsetUnchecked(collectionLength.ThrowIfCollectionLengthNegative())
             .ClampToValidIndices(collectionLength, allowCollectionLength: true);
 
     /// <summary>
@@ -330,7 +348,14 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private long GetClampedLengthWithClampedOffset(long collectionLength, out long offset)
     {
-        this.ThrowIfDegenerate();
+        if (IsDegenerate) // Treat as starting at the start and having length 0
+        {
+
+            offset = GetOffsetUnchecked(collectionLength)
+                        .ClampToValidIndices(collectionLength, allowCollectionLength: true);
+            return 0;
+        }
+
         collectionLength.ThrowIfCollectionLengthNegative();
 
         offset = Start.GetOffsetUnchecked(collectionLength);
@@ -438,6 +463,25 @@ public class DegenerateRangeException : InvalidOperationException
     /// <param name="info"></param>
     /// <param name="context"></param>
     protected DegenerateRangeException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+}
+
+/// <summary>
+/// Extension methods for the <see cref="LongRange"/> struct.
+/// </summary>
+public static class LongRangeExtensions
+{
+    /// <summary>
+    /// Throws a <see cref="DegenerateRangeException"/> if the current <see cref="LongRange"/> is degenerate, i.e. its
+    /// start index is always strictly after its end index.
+    /// </summary>
+    /// <param name="range"></param>
+    /// <returns>The current <see cref="LongRange"/>.</returns>
+    /// <exception cref="DegenerateRangeException">The current <see cref="LongRange"/> is degenerate.</exception>
+    public static ref readonly LongRange ThrowIfDegenerate(in this LongRange range)
+    {
+        if (range.IsDegenerate) throw new DegenerateRangeException();
+        else return ref range;
+    }
 }
 #endregion
 
@@ -624,20 +668,6 @@ public readonly record struct LongIndex(long Value, bool IsFromEnd = false)
 /// </summary>
 file static class Extensions
 {
-    /// <summary>
-    /// Throws an <see cref="InvalidOperationException"/> if the current <see cref="LongRange"/> is degenerate.
-    /// </summary>
-    /// <param name="range"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    /// <seealso cref="LongRange.IsDegenerate"/>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ref readonly LongRange ThrowIfDegenerate(in this LongRange range)
-    {
-        if (range.IsDegenerate) throw new DegenerateRangeException();
-        return ref range;
-    }
-
     /// <summary>
     /// Clamps the current <see cref="long"/> to the range of valid indices for a collection of the specified length.
     /// </summary>

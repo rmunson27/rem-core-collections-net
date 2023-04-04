@@ -67,8 +67,14 @@ public class LongRangeTest
     /// Ranges for which the offset and length cannot be obtained for a collection of length
     /// <see cref="TestCollectionLength"/> since the length would be negative.
     /// </summary>
-    private static readonly ImmutableArray<LongRange> DegenerateRanges
-        = new LongRange[] { 4..3, ^3..^4 }.ToImmutableArray();
+    private static readonly ImmutableArray<(LongRange Range, long ClampedOffset, long ClampedLength)> DegenerateRanges
+        = new (LongRange, long, long)[]
+        {
+            (6..5, 4, 0),
+            (4..3, 4, 0), (^0..^1, 4, 0),
+            (3..1, 3, 0), (^1..^3, 3, 0),
+            (^5..^6, 0, 0),
+        }.ToImmutableArray();
 
     /// <summary>
     /// Tests the <see cref="LongRange.IsDegenerate"/> property.
@@ -81,7 +87,7 @@ public class LongRangeTest
             Assert.IsFalse(range.IsDegenerate, $"Range {range} was degenerate.");
         }
 
-        foreach (var range in DegenerateRanges)
+        foreach (var (range, _, _) in DegenerateRanges)
         {
             Assert.IsTrue(range.IsDegenerate, $"Range {range} was not degenerate.");
         }
@@ -93,11 +99,16 @@ public class LongRangeTest
     [TestMethod]
     public void TestHasFixedCount()
     {
-        foreach (var range in new LongRange[] { 1..3, ^3..^1 }) // All have a fixed count of 2
+        foreach (var (range, expectedFixedCount) in new (LongRange Range, long FixedCount)[]
+                              {
+                                  (1..3, 2), (^3..^1, 2),
+                                  (3..1, -2), (^1..^3, -2),
+                              })
         {
             Assert.IsTrue(range.HasFixedCount(), $"Range {range} did not have fixed count.");
-            Assert.IsTrue(range.HasFixedCount(out var fixedCount), $"Range {range} did not have fixed count.");
-            Assert.AreEqual(2L, fixedCount, $"Range {range} did not have the expected fixed count.");
+            Assert.IsTrue(range.HasFixedCount(out var actualFixedCount), $"Range {range} did not have fixed count.");
+            Assert.AreEqual(expectedFixedCount, actualFixedCount,
+                            $"Range {range} did not have the expected fixed count.");
         }
 
         foreach (var range in new LongRange[] { 1..^1, ^1..1 })
@@ -122,14 +133,16 @@ public class LongRangeTest
 
         foreach (var (range, _, _) in ClampableRanges)
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => range.GetOffset(TestCollectionLength),
-                                                                $"Range {range} offset succeeded.");
+            Assert.ThrowsException<ArgumentOutOfRangeException>(
+                () => range.GetOffset(TestCollectionLength),
+                $"Range {range} offset did not throw expected exception.");
         }
 
-        foreach (var range in DegenerateRanges)
+        foreach (var (range, _, _) in DegenerateRanges)
         {
-            Assert.ThrowsException<DegenerateRangeException>(() => range.GetOffset(TestCollectionLength),
-                                                             $"Range {range} offset succeeded.");
+            Assert.ThrowsException<DegenerateRangeException>(
+                () => range.GetOffset(TestCollectionLength),
+                $"Range {range} offset did not throw the expected exception.");
         }
     }
 
@@ -145,16 +158,17 @@ public class LongRangeTest
                             $"Range {range} length was not expected value.");
         }
 
-        foreach (var (range, _, _) in ValidOffsetClampableLengthRanges.Concat(ClampableRanges))
+        foreach (var (range, _, _) in ValidOffsetClampableLengthRanges)
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => range.GetLength(TestCollectionLength),
-                                                                $"Range {range} length succeeded.");
+            Assert.ThrowsException<ArgumentOutOfRangeException>(
+                () => range.GetLength(TestCollectionLength),
+                $"Range {range} length did not throw expected exception.");
         }
 
-        foreach (var range in DegenerateRanges)
+        foreach (var (range, _, _) in DegenerateRanges)
         {
             Assert.ThrowsException<DegenerateRangeException>(() => range.GetLength(TestCollectionLength),
-                                                             $"Range {range} length succeeded.");
+                                                             $"Range {range} did not throw the expected exception.");
         }
     }
 
@@ -172,14 +186,15 @@ public class LongRangeTest
 
         foreach (var (range, _, _) in ValidOffsetClampableLengthRanges.Concat(ClampableRanges))
         {
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => range.GetOffsetAndLength(TestCollectionLength),
-                                                                $"Range {range} offset and length succeeded.");
+            Assert.ThrowsException<ArgumentOutOfRangeException>(
+                () => range.GetOffsetAndLength(TestCollectionLength),
+                $"Range {range} offset and length did not throw expected exception.");
         }
 
-        foreach (var range in DegenerateRanges)
+        foreach (var (range, _, _) in DegenerateRanges)
         {
             Assert.ThrowsException<DegenerateRangeException>(() => range.GetOffsetAndLength(TestCollectionLength),
-                                                             $"Range {range} offset and length succeeded.");
+                                                             $"Range {range} did not throw the expected exception.");
         }
     }
 
@@ -191,16 +206,11 @@ public class LongRangeTest
     {
         foreach (var (range, offset, _) in ValidRanges
                                             .Concat(ValidOffsetClampableLengthRanges)
-                                            .Concat(ClampableRanges))
+                                            .Concat(ClampableRanges)
+                                            .Concat(DegenerateRanges))
         {
             Assert.AreEqual(offset, range.GetClampedOffset(TestCollectionLength),
                             $"Range {range} clamped offset was not expected value.");
-        }
-
-        foreach (var range in DegenerateRanges)
-        {
-            Assert.ThrowsException<DegenerateRangeException>(() => range.GetOffset(TestCollectionLength),
-                                                             $"Range {range} offset succeeded.");
         }
     }
 
@@ -212,15 +222,11 @@ public class LongRangeTest
     {
         foreach (var (range, _, length) in ValidRanges
                                             .Concat(ValidOffsetClampableLengthRanges)
-                                            .Concat(ClampableRanges))
+                                            .Concat(ClampableRanges)
+                                            .Concat(DegenerateRanges))
         {
             Assert.AreEqual(length, range.GetClampedLength(TestCollectionLength),
                             $"Range {range} clamped length was not expected value.");
-        }
-
-        foreach (var range in DegenerateRanges)
-        {
-            Assert.ThrowsException<DegenerateRangeException>(() => range.GetClampedLength(TestCollectionLength));
         }
     }
 
@@ -232,17 +238,11 @@ public class LongRangeTest
     {
         foreach (var (range, offset, length) in ValidRanges
                                                     .Concat(ValidOffsetClampableLengthRanges)
-                                                    .Concat(ClampableRanges))
+                                                    .Concat(ClampableRanges)
+                                                    .Concat(DegenerateRanges))
         {
             Assert.AreEqual((offset, length), range.GetClampedOffsetAndLength(TestCollectionLength),
                             $"Range {range} offset and length was not expected value.");
-        }
-
-        foreach (var range in DegenerateRanges)
-        {
-            Assert.ThrowsException<DegenerateRangeException>(
-                () => range.GetClampedOffsetAndLength(TestCollectionLength),
-                $"Range {range} offset and length succeeded.");
         }
     }
 
