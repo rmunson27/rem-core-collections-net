@@ -255,7 +255,7 @@ public class LongRangeTest
     {
         foreach (var(range, offset, length) in ValidRanges)
         {
-            Assert.AreEqual(((int)offset, (int)length), ((Range)range).GetOffsetAndLength(TestCollectionLength),
+            Assert.AreEqual(((int)offset, (int)length), ((Range)range).GetOffsetAndLength((int)TestCollectionLength),
                             $"Range {range} offset and length did not match System.Range offset and length.");
         }
     }

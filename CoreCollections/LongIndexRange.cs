@@ -726,16 +726,6 @@ file static class Extensions
     public static long ClampToValidIndices(this long value, long collectionLength, bool allowCollectionLength = false)
         => value.Clamp(0, allowCollectionLength ? collectionLength : collectionLength - 1);
 
-    /// <summary>
-    /// Clamps the current <see cref="long"/> to a range specified by minimum and maximum values.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="min"></param>
-    /// <param name="max"></param>
-    /// <returns></returns>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static long Clamp(this long value, long min, long max) => Math.Min(Math.Max(value, min), max);
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static long ThrowIfCollectionLengthNegative(this long collectionLength)
         => collectionLength < 0
