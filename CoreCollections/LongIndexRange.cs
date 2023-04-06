@@ -488,10 +488,27 @@ public static class LongRangeExtensions
     /// <param name="range"></param>
     /// <returns>The current <see cref="LongRange"/>.</returns>
     /// <exception cref="DegenerateRangeException">The current <see cref="LongRange"/> is degenerate.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ref readonly LongRange ThrowIfDegenerate(in this LongRange range)
     {
         if (range.IsDegenerate) throw new DegenerateRangeException();
         else return ref range;
+    }
+
+    /// <summary>
+    /// Throws an <see cref="ArgumentException"/> if the current <see cref="LongRange"/> is degenerate, i.e. its start
+    /// index is always strictly after its end index.
+    /// </summary>
+    /// <param name="range"></param>
+    /// <param name="paramName"></param>
+    /// <returns>The current <see cref="LongRange"/>.</returns>
+    /// <exception cref="ArgumentException">The current <see cref="LongRange"/> is degenerate.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static ref readonly LongRange ThrowIfDegenerateArgument(in this LongRange range, string? paramName = null)
+    {
+        const string Msg = "Range is degenerate - its start point is always strictly after its end point.";
+        if (range.IsDegenerate) throw new ArgumentException(Msg, paramName);
+        return ref range;
     }
 }
 #endregion
