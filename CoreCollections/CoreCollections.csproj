@@ -19,6 +19,10 @@
 		<PackageReleaseNotes>Added collection base class that maps a range of indices to values in the collection using a selector function.</PackageReleaseNotes>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework.TrimEnd(`0123456789.`)' == 'netcoreapp' Or '$(TargetFramework)' == 'netstandard2.1' Or ('$(TargetFramework.TrimEnd(`0123456789.`))' == 'net' And '$(TargetFramework.TrimEnd(`0123456789`))' != 'net')">
+		<DefineConstants>INDEX_RANGE_SUPPORTED</DefineConstants>
+	</PropertyGroup>
+
 	<PropertyGroup Label="Language">
 		<LangVersion>11.0</LangVersion>
 		<Nullable>enable</Nullable>

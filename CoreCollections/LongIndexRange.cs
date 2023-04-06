@@ -328,7 +328,7 @@ public readonly record struct LongRange(in LongIndex Start, in LongIndex End)
     #endregion
 
     #region Conversions
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+#if INDEX_RANGE_SUPPORTED
     /// <summary>
     /// Implicitly converts a <see cref="Range"/> to a <see cref="LongRange"/>.
     /// </summary>
@@ -704,7 +704,7 @@ public readonly record struct LongIndex
     /// </summary>
     internal string FormattedValue => IsFromEnd ? $"^{~_value}" : _value.ToString();
 
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+#if INDEX_RANGE_SUPPORTED
     /// <summary>
     /// Implicitly converts an <see cref="Index"/> to a <see cref="LongIndex"/>.
     /// </summary>
