@@ -1,4 +1,5 @@
 ﻿using Rem.Core.Collections;
+using Rem.Core.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,6 +152,6 @@ public class ReadOnly2DArrayTest
     /// An equality comparer for comparing the equality of sequences of indices.
     /// </summary>
     private readonly NestedEqualityComparer<IEnumerable<(long, long)>, (long, long)> IndexSequenceComparer
-        = SequenceEquality.EnumerableComparer<(long, long)>();
+        = Enumerables.SequenceEqualityComparer<(long, long)>();
     #endregion
 }

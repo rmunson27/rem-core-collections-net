@@ -1,4 +1,5 @@
 ﻿using Rem.Core.Attributes;
+using Rem.Core.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
