@@ -580,6 +580,27 @@ public readonly record struct LongIndex
     }
 
     /// <summary>
+    /// Attempts to calculate the unclamped offset of this index from the start of a collection of
+    /// length <paramref name="collectionLength"/>, setting the offset in an <see langword="out"/> parameter
+    /// (clamping the value of necessary).
+    /// </summary>
+    /// <param name="collectionLength">The length of the collection to calculate the offset into.</param>
+    /// <param name="offset">
+    /// An <see langword="out"/> parameter to set the calculated offset to.
+    /// <para/>
+    /// If this method returns <see langword="true"/> this offset is not clamped, otherwise it is the requested offset
+    /// clamped to the range of valid indices for a collection of length <paramref name="collectionLength"/>.
+    /// </param>
+    /// <param name="allowCollectionLength">Whether or not the collection length is considered a valid index.</param>
+    /// <returns>
+    /// Whether or not this index had an unclamped offset into <paramref name="collectionLength"/>.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="collectionLength"/> was negative.</exception>
+    public bool TryGetUnclampedOffset(long collectionLength, out long offset, bool allowCollectionLength = false)
+        => GetOffsetUnchecked(collectionLength.ThrowIfCollectionLengthNegative())
+                .IsValidIndex(collectionLength, out offset, allowCollectionLength);
+
+    /// <summary>
     /// Calculates the offset of this instance from the start of a collection of
     /// length <paramref name="collectionLength"/>.
     /// If the index is outside of the range of valid indices for the collection, it will be treated as being clamped
@@ -733,6 +754,35 @@ public readonly record struct LongIndex
 /// </summary>
 file static class Extensions
 {
+    /// <summary>
+    /// Determines if this is a valid index, returning the value in <paramref name="clampedValue"/> (clamping if the
+    /// index is not valid).
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="collectionLength"></param>
+    /// <param name="clampedValue"></param>
+    /// <param name="allowCollectionLength"></param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsValidIndex(this long value,
+                                    long collectionLength, out long clampedValue, bool allowCollectionLength = false)
+    {
+        if (value < 0) return Try.Failure(out clampedValue, 0);
+
+        if (allowCollectionLength)
+        {
+            return value > collectionLength
+                            ? Try.Failure(out clampedValue, collectionLength)
+                            : Try.Success(out clampedValue, value);
+        }
+        else
+        {
+            return value >= collectionLength
+                            ? Try.Failure(out clampedValue, collectionLength - 1)
+                            : Try.Success(out clampedValue, value);
+        }
+    }
+
     /// <summary>
     /// Clamps the current <see cref="long"/> to the range of valid indices for a collection of the specified length.
     /// </summary>

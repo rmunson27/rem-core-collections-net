@@ -62,6 +62,60 @@ public class LongIndexTest
     }
 
     /// <summary>
+    /// Tests the <see cref="LongIndex.TryGetUnclampedOffset(long, out long, bool)"/> method.
+    /// </summary>
+    [TestMethod]
+    public void TestTryGetUnclampedOffset()
+    {
+        long computedOffset;
+
+        // All in range
+        foreach (var (index, offset) in ValidOffsetIndices)
+        {
+            Assert.IsTrue(index.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                      allowCollectionLength: true),
+                          $"Index {index} offset was unclamped.");
+            Assert.AreEqual(offset, computedOffset, $"Index {index} clamped offset did not match expected value.");
+
+            Assert.IsTrue(index.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                      allowCollectionLength: false),
+                          $"Index {index} offset was unclamped.");
+            Assert.AreEqual(offset, computedOffset, $"Index {index} clamped offset did not match expected value.");
+        }
+
+        // Should be in range as long as the collection length is allowed
+        foreach (var index in EndOfCollectionIndices)
+        {
+            Assert.IsTrue(index.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                      allowCollectionLength: true),
+                          $"Index {index} offset was unclamped.");
+            Assert.AreEqual(TestCollectionLength, computedOffset,
+                            $"Index {index} clamped offset did not match expected value.");
+
+            Assert.IsFalse(index.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                      allowCollectionLength: false),
+                          $"Index {index} offset was clamped.");
+            Assert.AreEqual(TestCollectionLength - 1, computedOffset,
+                            $"Index {index} unclamped offset did not match expected value.");
+        }
+
+        // Should be out of range even if the collection length is allowed
+        Assert.IsFalse(TooLargeOffsetIndex.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                                 allowCollectionLength: true));
+        Assert.AreEqual(TestCollectionLength, computedOffset);
+        Assert.IsFalse(TooLargeOffsetIndex.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                                 allowCollectionLength: false));
+        Assert.AreEqual(TestCollectionLength - 1, computedOffset);
+
+        Assert.IsFalse(TooSmallOffsetIndex.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                                 allowCollectionLength: true));
+        Assert.AreEqual(0, computedOffset);
+        Assert.IsFalse(TooSmallOffsetIndex.TryGetUnclampedOffset(TestCollectionLength, out computedOffset,
+                                                                 allowCollectionLength: false));
+        Assert.AreEqual(0, computedOffset);
+    }
+
+    /// <summary>
     /// Tests the <see cref="LongIndex.GetClampedOffset(long, bool)"/> method.
     /// </summary>
     [TestMethod]
