@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Output">
-		<TargetFrameworks>net461;netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
+		<TargetFrameworks>net461;net471;net472;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		<PackageReleaseNotes>Added collection base class that maps a range of indices to values in the collection using a selector function.</PackageReleaseNotes>
 	</PropertyGroup>
@@ -32,6 +32,18 @@
 	<PropertyGroup Label="Documentation" Condition="'$(Configuration)' == 'Release'">
 		<DocumentationFile>bin\Release\CoreCollections.xml</DocumentationFile>
 	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+		<PackageReference Include="IsExternalInit" Version="1.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Nullable" Version="1.3.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
 		<PackageReference Include="IsExternalInit" Version="1.0.3">
@@ -56,6 +68,36 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="IsExternalInit" Version="1.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+		<PackageReference Include="Nullable" Version="1.3.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+
+		<Using Remove="System.Net.Http" /><!-- Remove this using from auto-generation since this package is not used -->
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net471'">
+		<PackageReference Include="IsExternalInit" Version="1.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+		<PackageReference Include="Nullable" Version="1.3.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
+
+		<Using Remove="System.Net.Http" /><!-- Remove this using from auto-generation since this package is not used -->
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
