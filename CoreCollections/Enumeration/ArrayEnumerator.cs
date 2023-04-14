@@ -16,7 +16,7 @@ namespace Rem.Core.Collections.Enumeration;
 /// This can be used to avoid creating an object when only a struct is needed for iterating through an array.
 /// </remarks>
 /// <typeparam name="TElement">The type of elements of the array.</typeparam>
-public struct ArrayEnumerator<TElement> : IDefaultableStruct
+public struct ArrayEnumerator<TElement> : IDefaultableStruct, IEnumerator<TElement>
 {
     /// <inheritdoc/>
     public bool IsDefault => _array is null;
@@ -25,6 +25,8 @@ public struct ArrayEnumerator<TElement> : IDefaultableStruct
     /// Gets the index of the current element.
     /// </summary>
     public long CurrentIndex => _currentIndex;
+
+    object? IEnumerator.Current => Current;
 
     /// <inheritdoc cref="IEnumerator{T}.Current"/>
     [DoesNotReturnIfInstanceDefault]
@@ -75,5 +77,10 @@ public struct ArrayEnumerator<TElement> : IDefaultableStruct
     {
         _currentIndex = -1;
     }
+
+    /// <summary>
+    /// Does nothing - there is nothing to dispose of.
+    /// </summary>
+    public void Dispose() { }
 }
 
