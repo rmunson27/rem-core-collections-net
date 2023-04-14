@@ -121,10 +121,9 @@ public static class ImmutableArrays
         /// <inheritdoc/>
         public override bool Equals(
             [DefaultableStruct] ImmutableArray<T> x, [DefaultableStruct] ImmutableArray<T> y,
-            IEqualityComparer<T> nestedComparer)
+            IEqualityComparer<T>? nestedComparer)
         {
-            // Error checking
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
+            nestedComparer = nestedComparer.DefaultIfNull();
 
             // Remove default cases
             if (x.IsDefault) return y.IsDefault;
@@ -135,9 +134,9 @@ public static class ImmutableArrays
 
         /// <inheritdoc/>
         public override int GetHashCode(
-            [NonDefaultableStruct] ImmutableArray<T> obj, IEqualityComparer<T> nestedComparer)
+            [NonDefaultableStruct] ImmutableArray<T> obj, IEqualityComparer<T>? nestedComparer)
         {
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
+            nestedComparer = nestedComparer.DefaultIfNull();
             return obj.GetSequenceHashCode(nestedComparer, nameof(obj));
         }
     }

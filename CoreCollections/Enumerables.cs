@@ -37,14 +37,23 @@ public static class Enumerables
         else return items switch
         {
             null => throw new ArgumentNullException(nameof(items)),
-            ICollection<T> coll => coll.SelectItems(selector, coll.Count),
-            IReadOnlyCollection<T> coll => coll.SelectItems(selector, coll.Count),
-            _ => items.SelectItems(selector, items.Count()),
+            ICollection<T> coll => coll.SelectArrayRaw(selector, coll.Count),
+            IReadOnlyCollection<T> coll => coll.SelectArrayRaw(selector, coll.Count),
+            _ => items.SelectArrayRaw(selector, items.Count()),
         };
     }
 
+    /// <summary>
+    /// Maps a selector over the current <see cref="IEnumerable{T}"/> without 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="U"></typeparam>
+    /// <param name="items"></param>
+    /// <param name="selector"></param>
+    /// <param name="count"></param>
+    /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static U[] SelectItems<T, U>(this IEnumerable<T> items, Func<T, U> selector, int count)
+    private static U[] SelectArrayRaw<T, U>(this IEnumerable<T> items, Func<T, U> selector, int count)
     {
         var uArray = new U[count];
         int index = 0;
