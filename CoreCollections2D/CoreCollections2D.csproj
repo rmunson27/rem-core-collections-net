@@ -4,9 +4,7 @@
 		<Product>Rem.Core.Collections2D</Product>
 		<PackageId>Rem.Core.Collections2D</PackageId>
 		<RootNamespace>Rem.Core.Collections2D</RootNamespace>
-		<Description>
-			A core set of 2-dimensional collection utilities for .NET.
-		</Description>
+		<Description>A core set of 2-dimensional collection utilities for .NET.</Description>
 		<Version>1.0</Version>
 		<Authors>Richard E. Munson</Authors>
 		<Copyright>Richard E. Munson, 2022</Copyright>
@@ -16,7 +14,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Output">
-		<TargetFrameworks>net461;netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
+		<TargetFrameworks>net461;netstandard2.0;netstandard2.1</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		<PackageReleaseNotes>
 			Created the package.
@@ -24,7 +22,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Language">
-		<LangVersion>10.0</LangVersion>
+		<LangVersion>11.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
@@ -34,7 +32,7 @@
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-		<PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
@@ -43,7 +41,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net461'">
@@ -52,7 +50,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
+		<PackageReference Include="System.Collections.Immutable" Version="5.0.0" />
 
 		<Using Remove="System.Net.Http" />
 		<!-- Remove this using from auto-generation since this package is not used -->

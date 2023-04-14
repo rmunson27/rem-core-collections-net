@@ -137,16 +137,16 @@ public static class SequenceEquality2D
     private sealed class ArrayComparerType<T> : NestedEqualityComparer<T[,], T>
     {
         /// <inheritdoc/>
-        public override bool Equals([AllowNull] T[,] x, [AllowNull] T[,] y, IEqualityComparer<T> nestedComparer)
+        public override bool Equals(T[,]? x, T[,]? y, IEqualityComparer<T>? nestedComparer)
         {
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
-            return Equals<T>(x, y);
+            nestedComparer = nestedComparer.DefaultIfNull();
+            return Equals<T>(x, y, nestedComparer);
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode([DisallowNull] T[,] obj, IEqualityComparer<T> nestedComparer)
+        public override int GetHashCode(T[,] obj, IEqualityComparer<T>? nestedComparer)
         {
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
+            nestedComparer = nestedComparer.DefaultIfNull();
             return GetHashCode<T>(obj, nestedComparer);
         }
     }
@@ -156,16 +156,16 @@ public static class SequenceEquality2D
         /// <inheritdoc/>
         public override bool Equals(
             [AllowDefault] ReadOnly2DArray<T> x, [AllowDefault] ReadOnly2DArray<T> y,
-            IEqualityComparer<T> nestedComparer)
+            IEqualityComparer<T>? nestedComparer)
         {
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
-            return Equals<T>(x, y);
+            nestedComparer = nestedComparer.DefaultIfNull();
+            return Equals<T>(x, y, nestedComparer);
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode([DisallowDefault] ReadOnly2DArray<T> obj, IEqualityComparer<T> nestedComparer)
+        public override int GetHashCode(ReadOnly2DArray<T> obj, IEqualityComparer<T>? nestedComparer)
         {
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
+            nestedComparer = nestedComparer.DefaultIfNull();
             return GetHashCode<T>(obj, nestedComparer);
         }
     }
