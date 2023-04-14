@@ -1364,6 +1364,63 @@ where TLongCollection : IEnumerable<long> where TNullableLongCollection : IEnume
         Assert.That.AreSequenceEqual(EnumerateNumber1s(), Implementation.SkipWhile(NewNumber1s(0, 1, 2, 3),
                                                                                    (x, i) => x.Value + i < 7));
     }
+
+    /// <summary>
+    /// Tests the "Sum" methods.
+    /// </summary>
+    [TestMethod]
+    public void TestSum()
+    {
+        Assert.AreEqual(0, Implementation.Sum(Decimals.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableDecimals.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableDecimals.AllNull));
+        Assert.AreEqual(TestCollections.FirstHundredSum, Implementation.Sum(Decimals.FirstHundred));
+        Assert.AreEqual(TestCollections.FirstHundredNoFivesSum,
+                        Implementation.Sum(NullableDecimals.FirstHundredNoFives));
+        Assert.AreEqual(0, Implementation.Sum(Number1s.Empty, x => (decimal)-x.Value));
+        Assert.AreEqual(-TestCollections.FirstHundredSum,
+                        Implementation.Sum(Number1s.FirstHundred, x => (decimal)-x.Value));
+
+        Assert.AreEqual(0, Implementation.Sum(Doubles.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableDoubles.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableDoubles.AllNull));
+        Assert.AreEqual(TestCollections.FirstHundredSum, Implementation.Sum(Doubles.FirstHundred));
+        Assert.AreEqual(TestCollections.FirstHundredNoFivesSum,
+                        Implementation.Sum(NullableDoubles.FirstHundredNoFives));
+        Assert.AreEqual(0, Implementation.Sum(Number1s.Empty, x => (double)-x.Value));
+        Assert.AreEqual(-TestCollections.FirstHundredSum,
+                        Implementation.Sum(Number1s.FirstHundred, x => (double)-x.Value));
+
+        Assert.AreEqual(0, Implementation.Sum(Floats.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableFloats.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableFloats.AllNull));
+        Assert.AreEqual(TestCollections.FirstHundredSum, Implementation.Sum(Floats.FirstHundred));
+        Assert.AreEqual(TestCollections.FirstHundredNoFivesSum,
+                        Implementation.Sum(NullableFloats.FirstHundredNoFives));
+        Assert.AreEqual(0, Implementation.Sum(Number1s.Empty, x => (float)-x.Value));
+        Assert.AreEqual(-TestCollections.FirstHundredSum,
+                        Implementation.Sum(Number1s.FirstHundred, x => (float)-x.Value));
+
+        Assert.AreEqual(0, Implementation.Sum(Ints.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableInts.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableInts.AllNull));
+        Assert.AreEqual(TestCollections.FirstHundredSum, Implementation.Sum(Ints.FirstHundred));
+        Assert.AreEqual(TestCollections.FirstHundredNoFivesSum,
+                        Implementation.Sum(NullableInts.FirstHundredNoFives));
+        Assert.AreEqual(0, Implementation.Sum(Number1s.Empty, x => (int)-x.Value));
+        Assert.AreEqual(-TestCollections.FirstHundredSum,
+                        Implementation.Sum(Number1s.FirstHundred, x => (int)-x.Value));
+
+        Assert.AreEqual(0, Implementation.Sum(Longs.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableLongs.Empty));
+        Assert.AreEqual(0, Implementation.Sum(NullableLongs.AllNull));
+        Assert.AreEqual(TestCollections.FirstHundredSum, Implementation.Sum(Longs.FirstHundred));
+        Assert.AreEqual(TestCollections.FirstHundredNoFivesSum,
+                        Implementation.Sum(NullableLongs.FirstHundredNoFives));
+        Assert.AreEqual(0, Implementation.Sum(Number1s.Empty, x => (long)-x.Value));
+        Assert.AreEqual(-TestCollections.FirstHundredSum,
+                        Implementation.Sum(Number1s.FirstHundred, x => (long)-x.Value));
+    }
     #endregion
 
     #region T
