@@ -67,14 +67,33 @@ public class ArraySlicesTest
     }
 
     /// <summary>
+    /// Tests re-slicing of array slices.
+    /// </summary>
+    [TestMethod]
+    public void TestSlice()
+    {
+        var middleFour = ArraySlice.Create(FirstTen, 3, 4);
+        Assert.IsTrue(middleFour.Slice(2).SequenceEqual(new[] { 5, 6 }));
+        Assert.IsTrue(middleFour.Slice(1, 2).SequenceEqual(new[] { 4, 5 }));
+        Assert.IsTrue(middleFour.Slice(1..^1).SequenceEqual(new[] { 4, 5 }));
+        Assert.IsTrue(middleFour.Slice((LongRange)(1..^1)).SequenceEqual(new[] { 4, 5 }));
+
+        Assert.IsTrue(Array.Empty<int>().SequenceEqual(middleFour.Slice(0..0)));
+
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() => middleFour.Slice(6));
+        Assert.ThrowsException<ArgumentException>(() => middleFour.Slice(0..8));
+        Assert.ThrowsException<ArgumentException>(() => middleFour.Slice(^8..3));
+    }
+
+    /// <summary>
     /// Tests truncation of array slices.
     /// </summary>
     [TestMethod]
-    public void TestTruncate()
+    public void TestTruncateAt()
     {
         var middleFour = ArraySlice.Create(FirstTen, 3, 4);
-        Assert.IsTrue(middleFour.Truncate(2).SequenceEqual(new[] { 3, 4 }));
+        Assert.IsTrue(middleFour.TruncateAt(2).SequenceEqual(new[] { 3, 4 }));
 
-        Assert.ThrowsException<ArgumentOutOfRangeException>(() => middleFour.Truncate(5));
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() => middleFour.TruncateAt(5));
     }
 }

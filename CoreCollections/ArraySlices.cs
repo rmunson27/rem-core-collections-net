@@ -401,15 +401,15 @@ public readonly struct ReadOnlyArraySlice<T> : IDefaultableStruct, IEnumerable<T
 
     #region Slicing
     #region Exception-Throwing
-    /// <inheritdoc cref="ArraySliceCore{T}.Truncate(long)"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.TruncateAt(long)"/>
     [return: NonDefaultableStruct]
     [DoesNotReturnIfInstanceDefault]
-    public ReadOnlyArraySlice<T> Truncate(long count) => new(Core.Truncate(count));
+    public ReadOnlyArraySlice<T> TruncateAt(long count) => new(Core.TruncateAt(count));
 
-    /// <inheritdoc cref="ArraySliceCore{T}.OffsetBy(long)"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.Slice(long)"/>
     [return: NonDefaultableStruct]
     [DoesNotReturnIfInstanceDefault]
-    public ReadOnlyArraySlice<T> OffsetBy(long offset) => new(Core.OffsetBy(offset));
+    public ReadOnlyArraySlice<T> Slice(long offset) => new(Core.Slice(offset));
 
 #if INDEX_RANGE_SUPPORTED
     /// <inheritdoc cref="ArraySliceCore{T}.Slice(Range)"/>
@@ -692,15 +692,15 @@ public readonly struct ArraySlice<T> : IDefaultableStruct, IEnumerable<T>, IList
 
     #region Slicing
     #region Exception-Throwing
-    /// <inheritdoc cref="ArraySliceCore{T}.Truncate(long)"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.TruncateAt(long)"/>
     [return: NonDefaultableStruct]
     [DoesNotReturnIfInstanceDefault]
-    public ArraySlice<T> Truncate(long count) => new(Core.Truncate(count));
+    public ArraySlice<T> TruncateAt(long count) => new(Core.TruncateAt(count));
 
-    /// <inheritdoc cref="ArraySliceCore{T}.OffsetBy(long)"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.Slice(long)"/>
     [return: NonDefaultableStruct]
     [DoesNotReturnIfInstanceDefault]
-    public ArraySlice<T> OffsetBy(long offset) => new(Core.OffsetBy(offset));
+    public ArraySlice<T> Slice(long offset) => new(Core.Slice(offset));
 
 #if INDEX_RANGE_SUPPORTED
     /// <inheritdoc cref="ArraySliceCore{T}.Slice(Range)"/>
@@ -1155,7 +1155,7 @@ file readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerat
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NonDefaultableStruct]
     [DoesNotReturnIfInstanceDefault]
-    public ArraySliceCore<T> Truncate(long count)
+    public ArraySliceCore<T> TruncateAt(long count)
     {
         if (count < 0) throw new ArgumentOutOfRangeException(nameof(count), count, "Count was negative.");
         if (count > LongCount)
@@ -1180,7 +1180,7 @@ file readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerat
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     [return: NonDefaultableStruct]
     [DoesNotReturnIfInstanceDefault]
-    public ArraySliceCore<T> OffsetBy(long offset)
+    public ArraySliceCore<T> Slice(long offset)
     {
         if (offset > LongCount)
         {
@@ -1271,7 +1271,7 @@ file readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerat
     /// Creates a slice consisting of the elements of this instance with the specified number of elements skipped.
     /// </summary>
     /// <remarks>
-    /// Unlike the <c>OffsetBy</c> methods, this method will clamp the count to valid values for the slice rather than
+    /// Unlike the <c>Slice</c> methods, this method will clamp the count to valid values for the slice rather than
     /// throwing an exception.
     /// </remarks>
     /// <param name="count">The number of elements to skip.</param>
@@ -1290,7 +1290,7 @@ file readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerat
     /// the end.
     /// </summary>
     /// <remarks>
-    /// Unlike the <c>OffsetBy</c> methods, this method will clamp the count to valid values for the slice rather than
+    /// Unlike the <c>Slice</c> methods, this method will clamp the count to valid values for the slice rather than
     /// throwing an exception.
     /// </remarks>
     /// <param name="count">The number of elements to remove from the end.</param>
