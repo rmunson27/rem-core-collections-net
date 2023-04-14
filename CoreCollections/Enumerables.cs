@@ -112,23 +112,19 @@ public static class Enumerables
 
         /// <inheritdoc/>
         public override bool Equals(
-            IEnumerable<T>? x, IEnumerable<T>? y, IEqualityComparer<T> nestedComparer)
+            IEnumerable<T>? x, IEnumerable<T>? y, IEqualityComparer<T>? nestedComparer)
         {
-            // Error checking
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
-
             // Remove null cases
             if (x is null) return y is null;
             else if (y is null) return false;
 
-            return x.SequenceEqual(y, nestedComparer);
+            return x.SequenceEqual(y, nestedComparer.DefaultIfNull());
         }
 
         /// <inheritdoc/>
-        public override int GetHashCode(IEnumerable<T> obj, IEqualityComparer<T> nestedComparer)
+        public override int GetHashCode(IEnumerable<T> obj, IEqualityComparer<T>? nestedComparer)
         {
-            if (nestedComparer is null) throw new ArgumentNullException(nameof(nestedComparer));
-            else return obj.GetSequenceHashCode(nestedComparer, nameof(obj));
+            return obj.GetSequenceHashCode(nestedComparer.DefaultIfNull(), nameof(obj));
         }
     }
     #endregion
