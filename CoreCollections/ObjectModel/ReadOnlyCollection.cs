@@ -19,4 +19,12 @@ public class ReadOnlyCollection<T> : System.Collections.ObjectModel.ReadOnlyColl
     /// </summary>
     /// <param name="list">The list to wrap in the new instance.</param>
     public ReadOnlyCollection(IList<T> list) : base(list) { }
+
+    /// <summary>
+    /// Constructs a new instance of the <see cref="ReadOnlyCollection{T}"/> class wrapping the specified
+    /// <see cref="ReadOnlyArray{T}"/> without boxing it.
+    /// </summary>
+    /// <param name="list"></param>
+    /// <exception cref="ArgumentNullException"><paramref name="list"/> was <see langword="default"/>.</exception>
+    public ReadOnlyCollection(ReadOnlyArray<T> list) : base(list._array) { } // Safe to pass the array
 }

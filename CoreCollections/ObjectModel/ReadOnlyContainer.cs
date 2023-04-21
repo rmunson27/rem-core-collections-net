@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Rem.Core.ComponentModel;
 
 namespace Rem.Core.Collections.ObjectModel;
 
@@ -34,6 +35,20 @@ public class ReadOnlyContainer<T> : ICollection<T>, IReadOnlyContainer<T>
     {
         if (collection is null) throw new ArgumentNullException(nameof(collection));
         _collection = collection;
+    }
+
+    /// <summary>
+    /// Constructs a new instance of the <see cref="ReadOnlyContainer{T}"/> class wrapping the
+    /// <see cref="ReadOnlyArray{T}"/> passed in without boxing it.
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <exception cref="StructArgumentDefaultException">
+    /// <paramref name="collection"/> was <see langword="default"/>.
+    /// </exception>
+    public ReadOnlyContainer(ReadOnlyArray<T> collection)
+    {
+        if (collection.IsDefault) throw new StructArgumentDefaultException(nameof(collection));
+        _collection = collection._array; // Safe to pass the array
     }
 
     [DoesNotReturn]
