@@ -18,6 +18,7 @@ public class ReadOnlyCollection<T> : System.Collections.ObjectModel.ReadOnlyColl
     /// <see cref="IList{T}"/>.
     /// </summary>
     /// <param name="list">The list to wrap in the new instance.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="list"/> was <see langword="null"/>.</exception>
     public ReadOnlyCollection(IList<T> list) : base(list) { }
 
     /// <summary>
