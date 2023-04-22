@@ -46,6 +46,7 @@ public static class ReadOnlyArray
 
     #region ReadOnlyArray<T> Extensions
     #region LINQ
+    #region A
     #region Aggregate
     /// <summary>
     /// Applies an accumulator function over the current <see cref="ReadOnlyArray{T}"/>.
@@ -214,11 +215,11 @@ public static class ReadOnlyArray
                                            Func<TSource, long?> selector)
         => source._array.Average(selector);
     #endregion
-
-#if NET6_0_OR_GREATER
-    #region Chunk
-    // Included as instance methods
     #endregion
+
+    #region C
+#if NET6_0_OR_GREATER
+    // Chunk included as instance methods
 #endif
 
     #region Concat
@@ -277,7 +278,9 @@ public static class ReadOnlyArray
                                      Func<TSource, bool> predicate)
         => source._array.Count(predicate);
     #endregion
+    #endregion
 
+    #region D
     #region DefaultIfEmpty
     /// <inheritdoc cref="Enumerable.DefaultIfEmpty{TSource}(IEnumerable{TSource})"/>
     public static IEnumerable<TSource?> DefaultIfEmpty<TSource>(
@@ -315,7 +318,9 @@ public static class ReadOnlyArray
         => source._array.DistinctBy(keySelector, comparer);
     #endregion
 #endif
+    #endregion
 
+    #region E
     #region ElementAt
     /// <inheritdoc cref="Enumerable.ElementAt{TSource}(IEnumerable{TSource}, int)"/>
     public static TSource ElementAt<TSource>([NonDefaultableStruct] this ReadOnlyArray<TSource> source, int index)
@@ -508,7 +513,9 @@ public static class ReadOnlyArray
         => first._array.ExceptBy(second.ToParent<TChildKey, TParentKey>(), keySelector, comparer);
     #endregion
 #endif
+    #endregion
 
+    #region F
     #region First
     /// <inheritdoc cref="Enumerable.First{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
     public static TSource First<TSource>([NonDefaultableStruct] this ReadOnlyArray<TSource> source,
@@ -542,7 +549,9 @@ public static class ReadOnlyArray
         => source._array.FirstOrDefault(defaultValue);
 #endif
     #endregion
+    #endregion
 
+    #region G
     #region GroupBy
     /// <inheritdoc cref="Enumerable.GroupBy{TSource, TKey, TElement, TResult}(IEnumerable{TSource}, Func{TSource, TKey}, Func{TSource, TElement}, Func{TKey, IEnumerable{TElement}, TResult})"/>
     public static IEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(
@@ -682,7 +691,9 @@ public static class ReadOnlyArray
         => outer._array.GroupJoin(inner.ToParent<TInnerChild, TInnerParent>(),
                                   outerKeySelector, innerKeySelector, resultSelector, comparer);
     #endregion
+    #endregion
 
+    #region I
     #region Intersect
     /// <inheritdoc cref="Intersect{TParent, TChild}(ReadOnlyArray{TParent}, ReadOnlyArray{TChild}, IEqualityComparer{TParent}?)"/>
     public static IEnumerable<TParent> Intersect<TParent, TChild>(this IEnumerable<TParent> first,
@@ -807,7 +818,9 @@ public static class ReadOnlyArray
         => first._array.IntersectBy(second.ToParent<TChildKey, TParentKey>(), keySelector, keyComparer);
     #endregion
 #endif
+    #endregion
 
+    #region J
     #region Join
     /// <inheritdoc cref="Join{TOuter, TParentInner, TChildInner, TKey, TResult}(ReadOnlyArray{TOuter}, ReadOnlyArray{TChildInner}, Func{TOuter, TKey}, Func{TParentInner, TKey}, Func{TOuter, TParentInner, TResult}, IEqualityComparer{TKey}?)"/>
     public static IEnumerable<TResult> Join<TOuter, TParentInner, TChildInner, TKey, TResult>(
@@ -884,7 +897,9 @@ public static class ReadOnlyArray
                              outerKeySelector, innerKeySelector,
                              resultSelector, comparer);
     #endregion
+    #endregion
 
+    #region L
     #region Last
     /// <inheritdoc cref="Enumerable.Last{TSource}(IEnumerable{TSource})"/>
     public static TSource Last<TSource>([NonDefaultableStruct] this ReadOnlyArray<TSource> source,
@@ -931,7 +946,9 @@ public static class ReadOnlyArray
     public static long LongCount<TSource>([NonDefaultableStruct] this ReadOnlyArray<TSource> source)
         => source._array.LongLength;
     #endregion
+    #endregion
 
+    #region M
     #region Max
     /// <inheritdoc cref="Enumerable.Max(IEnumerable{decimal})"/>
     public static decimal Max([NonDefaultableStruct] this ReadOnlyArray<decimal> source) => source._array.Max();
@@ -1160,7 +1177,9 @@ public static class ReadOnlyArray
         => source._array.MinBy(keySelector, comparer);
     #endregion
 #endif
+    #endregion
 
+    #region O
 #if NET7_0_OR_GREATER
     #region Order
     /// <inheritdoc cref="Enumerable.Order{T}(IEnumerable{T})"/>
@@ -1213,7 +1232,9 @@ public static class ReadOnlyArray
         => source._array.OrderDescending(comparer);
     #endregion
 #endif
+    #endregion
 
+    #region P
 #if NET471_OR_GREATER || NET5_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER || NETCOREAPP
     #region Prepend
     /// <inheritdoc cref="Enumerable.Prepend{TSource}(IEnumerable{TSource}, TSource)"/>
@@ -1222,13 +1243,17 @@ public static class ReadOnlyArray
         => source._array.Prepend(element);
     #endregion
 #endif
+    #endregion
 
+    #region R
     #region Reverse
     /// <inheritdoc cref="Enumerable.Reverse{TSource}(IEnumerable{TSource})"/>
     public static IEnumerable<TSource> Reverse<TSource>([NonDefaultableStruct] this ReadOnlyArray<TSource> source)
         => source._array.Reverse();
     #endregion
+    #endregion
 
+    #region S
     #region Select
     /// <summary>
     /// Maps a selector over the current <see cref="ReadOnlyArray{T}"/>.
@@ -1442,17 +1467,11 @@ public static class ReadOnlyArray
 #endif
     #endregion
 
-    #region Skip
-    // Included as instance methods
-    #endregion
+    // Skip included as instance methods
 
-    #region SkipLast
-    // Included as instance methods
-    #endregion
+    // SkipLast included as instance methods
 
-    #region SkipWhile
-    // Included as instance methods
-    #endregion
+    // SkipWhile included as instance methods
 
     #region Sum
     /// <inheritdoc cref="Enumerable.Sum(IEnumerable{decimal})"/>
@@ -1535,20 +1554,16 @@ public static class ReadOnlyArray
                                      Func<TSource, long?> selector)
         => source._array.Sum(selector);
     #endregion
-
-    #region Take
-    // Included as instance methods
     #endregion
+
+    #region T
+    // Take included as instance methods
 
 #if NET5_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
-    #region TakeLast
-    // Included as instance methods
-    #endregion
+    // TakeLast included as instance methods
 #endif
 
-    #region TakeWhile
-    // Included as instance methods
-    #endregion
+    // TakeWhile included as instance methods
 
     #region ToArray
     /// <summary>
@@ -1671,7 +1686,9 @@ public static class ReadOnlyArray
         => Try.Success(out count, source._array.Length);
     #endregion
 #endif
+    #endregion
 
+    #region U
     #region Union
     /// <inheritdoc cref="Union{TParent, TChild}(ReadOnlyArray{TParent}, ReadOnlyArray{TChild}, IEqualityComparer{TParent}?)"/>
     public static IEnumerable<TParent> Union<TParent, TChild>(this IEnumerable<TParent> source,
@@ -1787,7 +1804,9 @@ public static class ReadOnlyArray
         => first._array.UnionBy(second.ToParent<TChild, TParent>(), keySelector, comparer);
     #endregion
 #endif
+    #endregion
 
+    #region W
     #region Where
     /// <summary>
     /// Filters the current <see cref="ReadOnlyArray{T}"/> based on a predicate.
@@ -1818,7 +1837,9 @@ public static class ReadOnlyArray
         for (long l = 0; l < array.LongLength; l++) if (predicate(array[l], l)) yield return array[l];
     }
     #endregion
+    #endregion
 
+    #region Z
     #region Zip
     /// <inheritdoc cref="Zip{TFirst, TSecondParent, TSecondChild, TResult}(ReadOnlyArray{TFirst}, ReadOnlyArray{TSecondChild}, Func{TFirst, TSecondParent, TResult})"/>
     public static IEnumerable<TResult> Zip<TFirst, TSecondParent, TSecondChild, TResult>(
@@ -1925,6 +1946,7 @@ public static class ReadOnlyArray
             [NonDefaultableStruct] ReadOnlyArray<TSecond> second, [NonDefaultableStruct] ReadOnlyArray<TThird> third)
         => first._array.Zip(second._array, third._array);
 #endif
+    #endregion
     #endregion
     #endregion
 
