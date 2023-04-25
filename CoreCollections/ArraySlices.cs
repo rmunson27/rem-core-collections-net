@@ -848,6 +848,9 @@ public readonly struct ArraySlice<T> : IDefaultableStruct, IEnumerable<T>, IList
 
     /// <inheritdoc cref="ArraySliceCore{T}.implicit operator ReadOnlySpan{T}(in ArraySliceCore{T})"/>
     public static implicit operator ReadOnlySpan<T>(in ArraySlice<T> slice) => slice.Core;
+
+    /// <inheritdoc cref="ArraySliceCore{T}.implicit operator ArraySegment{T}(in ArraySliceCore{T})"/>
+    public static implicit operator ArraySegment<T>(in ArraySlice<T> slice) => (ArraySegment<T>)slice.Core;
     #endregion
 
     #region Equality
@@ -1652,6 +1655,14 @@ file readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerat
     /// <param name="slice"></param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator ReadOnlySpan<T>(in ArraySliceCore<T> slice)
+        => new(slice.Array, slice.Offset, slice.Count);
+
+    /// <summary>
+    /// Implicitly converts a slice to an equivalent <see cref="ArraySegment{T}"/>.
+    /// </summary>
+    /// <param name="slice"></param>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator ArraySegment<T>(in ArraySliceCore<T> slice)
         => new(slice.Array, slice.Offset, slice.Count);
     #endregion
 }
