@@ -33,7 +33,7 @@ public class IndexSelectionListTest
     public void TestGetHashCode()
     {
         var list = new IndexSelectorList<int>(Square, 4);
-        Assert.AreEqual(list.GetSequenceHashCode(), SequenceEquality.GetHashCode(new[] { 0, 1, 4, 9 }));
+        Assert.AreEqual(list.GetSequenceHashCode(), new[] { 0, 1, 4, 9 }.GetSequenceHashCode());
     }
 
     /// <summary>

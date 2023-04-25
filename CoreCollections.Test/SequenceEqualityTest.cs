@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Rem.Core.Collections.Test;
 
+#pragma warning disable CS0618 // Obsolete but still needs to be tested
 /// <summary>
 /// Tests of the <see cref="SequenceEquality"/> class.
 /// </summary>
@@ -84,3 +85,4 @@ public class SequenceEqualityTest
         private static bool IsEven(int i) => i % 2 == 0;
     }
 }
+#pragma warning restore CS0618
