@@ -29,6 +29,24 @@ public class ArraySlicesTest
     }
 
     /// <summary>
+    /// Tests conversions to and from <see cref="ArraySlice{T}"/> instances.
+    /// </summary>
+    [TestMethod]
+    public void TestConversions()
+    {
+        var arr = new[] { 1, 2, 3, 4, 5 };
+        var seg = new ArraySegment<int>(arr, 2, 2);
+        var slice = ArraySlice.Create(arr, 2, 2);
+
+        Assert.IsTrue(((ArraySlice<int>)arr).SequenceEqual(arr));
+        Assert.IsTrue(((ArraySlice<int>)seg).SequenceEqual(seg));
+        Assert.IsTrue(((ArraySegment<int>)slice).SequenceEqual(seg));
+        Assert.IsTrue(((ReadOnlySpan<int>)seg).ToArray().SequenceEqual(seg)); // Control
+        Assert.IsTrue(((ReadOnlySpan<int>)slice).ToArray().SequenceEqual(seg));
+        Assert.IsTrue(((Span<int>)slice).ToArray().SequenceEqual(seg));
+    }
+
+    /// <summary>
     /// Tests enumeration of <see cref="ArraySlice{T}"/> instances.
     /// </summary>
     [TestMethod]
