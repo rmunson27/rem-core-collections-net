@@ -542,7 +542,7 @@ public readonly struct ReadOnlyArraySlice<T> : IDefaultableStruct, IEnumerable<T
     public static ReadOnlyArraySlice<T> FromChild<TChild>(in ReadOnlyArraySlice<TChild> slice) where TChild : class, T
         => new(ArraySliceCore<T>.FromChild(in slice.Core));
 
-    /// <inheritdoc cref="ArraySliceCore{T}.op_Implicit(T[]?)"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.implicit operator ArraySliceCore{T}(T[])"/>
     [return: MaybeDefaultIfDefault(nameof(array))]
     public static implicit operator ReadOnlyArraySlice<T>(T[]? array) => new((ArraySliceCore<T>)array);
 
@@ -563,7 +563,7 @@ public readonly struct ReadOnlyArraySlice<T> : IDefaultableStruct, IEnumerable<T
     public static implicit operator ReadOnlyArraySlice<T>(ReadOnlyArray<T> array)
         => new((ArraySliceCore<T>)array._array);
 
-    /// <inheritdoc cref="ArraySliceCore{T}.op_Implicit(ArraySegment{T})"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.implicit operator ArraySliceCore{T}(ArraySegment{T})"/>
     public static implicit operator ReadOnlyArraySlice<T>(ArraySegment<T> segment) => new((ArraySliceCore<T>)segment);
 
     /// <inheritdoc cref="ArraySliceCore{T}.implicit operator ReadOnlySpan{T}(in ArraySliceCore{T})"/>
@@ -836,11 +836,11 @@ public readonly struct ArraySlice<T> : IDefaultableStruct, IEnumerable<T>, IList
     public static ArraySlice<T> FromChild<TChild>(in ArraySlice<TChild> slice) where TChild : class, T
         => new(ArraySliceCore<T>.FromChild(in slice.Core));
 
-    /// <inheritdoc cref="ArraySliceCore{T}.op_Implicit(T[]?)"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.implicit operator ArraySliceCore{T}(T[])"/>
     [return: MaybeDefaultIfDefault(nameof(array))]
     public static implicit operator ArraySlice<T>(T[]? array) => new((ArraySliceCore<T>)array);
 
-    /// <inheritdoc cref="ArraySliceCore{T}.op_Implicit(ArraySegment{T})"/>
+    /// <inheritdoc cref="ArraySliceCore{T}.implicit operator ArraySliceCore{T}(ArraySegment{T})"/>
     public static implicit operator ArraySlice<T>(ArraySegment<T> segment) => new((ArraySliceCore<T>)segment);
 
     /// <inheritdoc cref="ArraySliceCore{T}.implicit operator Span{T}(in ArraySliceCore{T})"/>
