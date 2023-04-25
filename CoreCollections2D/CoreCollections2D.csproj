@@ -5,7 +5,7 @@
 		<PackageId>Rem.Core.Collections2D</PackageId>
 		<RootNamespace>Rem.Core.Collections2D</RootNamespace>
 		<Description>A core set of 2-dimensional collection utilities for .NET.</Description>
-		<Version>1.1</Version>
+		<Version>1.1.1</Version>
 		<Authors>Richard E. Munson</Authors>
 		<Copyright>Richard E. Munson, 2022</Copyright>
 		<WebPage>https://github.com/rmunson27/core-attributes-net/</WebPage>
@@ -16,7 +16,7 @@
 	<PropertyGroup Label="Output">
 		<TargetFrameworks>net461;netstandard2.0;netstandard2.1</TargetFrameworks>
 		<OutputType>Library</OutputType>
-		<PackageReleaseNotes>Removed .NET 5.0 target.  Downgraded `System.Collections.Immutable` minimum requirement to version 5.0.  Fixed some incorrect null handling.</PackageReleaseNotes>
+		<PackageReleaseNotes>Upgraded `Rem.Core.Collections` minimum dependency to non-deprecated version.</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Language">
