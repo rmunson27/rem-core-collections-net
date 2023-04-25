@@ -973,8 +973,10 @@ public struct ArraySliceEnumerator<T> : IDefaultableStruct, IEnumerator<T>
 file readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerator<T>, T>
 {
     #region Properties And Indexers
-    /// <inheritdoc/>
-    public bool IsDefault => Array is not null;
+    /// <summary>
+    /// Determines if this slice is the degenerate <see langword="null"/>-wrapping value.
+    /// </summary>
+    public bool IsDefault => Array is null;
 
 #if INDEX_RANGE_SUPPORTED
     /// <inheritdoc cref="ElementAt(long)"/>

@@ -19,6 +19,16 @@ public class ArraySlicesTest
     private readonly int[] FirstTen = Enumerable.Range(0, 10).ToArray();
 
     /// <summary>
+    /// Tests the <see cref="ArraySlice{T}.IsDefault"/> property.
+    /// </summary>
+    [TestMethod]
+    public void TestIsDefault()
+    {
+        Assert.IsTrue(default(ArraySlice<int>).IsDefault);
+        Assert.IsFalse(new ArraySlice<int>(new[] { 1, 2, 3 }).IsDefault);
+    }
+
+    /// <summary>
     /// Tests enumeration of <see cref="ArraySlice{T}"/> instances.
     /// </summary>
     [TestMethod]
