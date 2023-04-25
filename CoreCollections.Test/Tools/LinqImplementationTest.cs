@@ -287,26 +287,30 @@ where TLongCollection : IEnumerable<long> where TNullableLongCollection : IEnume
         // Chunk size is greater than length of collection
         Assert.That.AreSequenceEqual(TestCollections.FirstHundredRange
                                         .Chunk(200)
-                                        .Select(c => NewChunk(c.Select(v => new Number1Child(v)))),
-                                      Implementation.Chunk(Number1s.FirstHundred, 200));
+                                        .Select(c => c.Select(v => new Number1Child(v))),
+                                     Implementation.Chunk(Number1s.FirstHundred, 200).Select(c => c.AsEnumerable()),
+                                     Enumerables.SequenceEqualityComparer<Number1>());
 
         // Chunk size is length of collection
         Assert.That.AreSequenceEqual(TestCollections.FirstHundredRange
                                         .Chunk(100)
-                                        .Select(c => NewChunk(c.Select(v => new Number1Child(v)))),
-                                      Implementation.Chunk(Number1s.FirstHundred, 100));
+                                        .Select(c => c.Select(v => new Number1Child(v))),
+                                     Implementation.Chunk(Number1s.FirstHundred, 100).Select(c => c.AsEnumerable()),
+                                     Enumerables.SequenceEqualityComparer<Number1>());
 
         // Length is a multiple of chunk size
         Assert.That.AreSequenceEqual(TestCollections.FirstHundredRange
                                         .Chunk(2)
-                                        .Select(c => NewChunk(c.Select(v => new Number1Child(v)))),
-                                      Implementation.Chunk(Number1s.FirstHundred, 2));
+                                        .Select(c => c.Select(v => new Number1Child(v))),
+                                     Implementation.Chunk(Number1s.FirstHundred, 2).Select(c => c.AsEnumerable()),
+                                     Enumerables.SequenceEqualityComparer<Number1>());
 
         // Length is not a multiple of chunk size
         Assert.That.AreSequenceEqual(TestCollections.FirstHundredRange
                                         .Chunk(3)
-                                        .Select(c => NewChunk(c.Select(v => new Number1Child(v)))),
-                                      Implementation.Chunk(Number1s.FirstHundred, 3));
+                                        .Select(c => c.Select(v => new Number1Child(v))),
+                                     Implementation.Chunk(Number1s.FirstHundred, 3).Select(c => c.AsEnumerable()),
+                                     Enumerables.SequenceEqualityComparer<Number1>());
 
         // Chunk size is too small
         Assert.ThrowsException<ArgumentOutOfRangeException>(() => Implementation.Chunk(Number1s.FirstHundred, 0));
