@@ -895,9 +895,9 @@ public struct ArraySliceEnumerator<T> : IDefaultableStruct, IEnumerator<T>
     private const long AlreadyFinishedIndex = -2;
 
     /// <inheritdoc/>
-    public bool IsDefault => Slice.IsDefault;
+    public readonly bool IsDefault => Slice.IsDefault;
 
-    object? IEnumerator.Current => Current;
+    readonly object? IEnumerator.Current => Current;
 
     /// <summary>
     /// Gets the current element of the enumeration.
@@ -906,16 +906,16 @@ public struct ArraySliceEnumerator<T> : IDefaultableStruct, IEnumerator<T>
     /// The enumeration has not yet started, or is already finished.
     /// </exception>
     [DoesNotReturnIfInstanceDefault]
-    public T Current => CurrentIndex switch
+    public readonly T Current => CurrentIndex switch
     {
         NotStartedIndex => throw Enumerators.NotStartedException,
         AlreadyFinishedIndex => throw Enumerators.AlreadyFinishedException,
         _ => Slice.ElementAt(CurrentIndex),
     };
 
-    private long CurrentIndex { get; set; }
+    private long CurrentIndex { readonly get; set; }
 
-    private ArraySliceCore<T> Slice { get; }
+    private readonly ArraySliceCore<T> Slice { get; }
 
     /// <summary>
     /// Constructs a new slice enumerator wwapping the slice core passed in.
@@ -966,7 +966,7 @@ public struct ArraySliceEnumerator<T> : IDefaultableStruct, IEnumerator<T>
     /// <summary>
     /// Does nothing, as there are no resources to dispose of.
     /// </summary>
-    public void Dispose() { }
+    public readonly void Dispose() { }
 }
 
 /// <summary>
