@@ -467,6 +467,7 @@ public class DegenerateRangeException : InvalidOperationException
     /// <param name="innerException"></param>
     public DegenerateRangeException(string message, Exception innerException) : base(message, innerException) { }
 
+#if !NET8_0_OR_GREATER
     /// <summary>
     /// Constructs a new instance of the <see cref="DegenerateRangeException"/> from the serialization data passed in
     /// (serialization constructor).
@@ -474,6 +475,7 @@ public class DegenerateRangeException : InvalidOperationException
     /// <param name="info"></param>
     /// <param name="context"></param>
     protected DegenerateRangeException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+#endif
 }
 
 /// <summary>

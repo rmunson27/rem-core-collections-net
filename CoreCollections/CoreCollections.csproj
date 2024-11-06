@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Output">
-		<TargetFrameworks>net461;net471;net472;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net461;net471;net472;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		<PackageReleaseNotes>Patched a bug in `ArraySegment&lt;T&gt;.IsDefault`. Added a conversion for `ArraySlice&lt;T&gt;` -> `ArraySegment&lt;T&gt;`. Removed an unsafe `ReadOnlyCollection&lt;T&gt;(ReadOnlyArray&lt;T&gt;)` constructor.</PackageReleaseNotes>
 	</PropertyGroup>
@@ -24,7 +24,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Label="Language">
-		<LangVersion>11.0</LangVersion>
+		<LangVersion>12.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
