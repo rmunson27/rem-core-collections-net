@@ -973,7 +973,7 @@ public struct ArraySliceEnumerator<T> : IDefaultableStruct, IEnumerator<T>
 /// The core functionality for array slices.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-file readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerator<T>, T>
+internal readonly struct ArraySliceCore<T> : ISpecifiedEnumerable<ArraySliceEnumerator<T>, T>
 {
     #region Properties And Indexers
     /// <summary>
